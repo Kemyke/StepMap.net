@@ -1,15 +1,13 @@
-﻿CREATE TABLE stepmap.[User]
-	(
-	Id int NOT NULL,
-	Name nvarchar(MAX) NOT NULL,
-	Email nvarchar(MAX) NOT NULL,
-	PasswordHash nvarchar(MAX) NOT NULL,
-	LastLogin datetime2(7) NOT NULL
-	)  
-GO
+﻿CREATE TABLE [stepmap].[User](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](max) NOT NULL,
+	[Email] [nvarchar](max) NOT NULL,
+	[PasswordHash] [nvarchar](max) NOT NULL,
+	[LastLogin] [datetime2](7) NOT NULL,
+ CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-ALTER TABLE stepmap.[User] ADD CONSTRAINT PK_User PRIMARY KEY CLUSTERED 
-	(
-		Id
-	) 
 GO

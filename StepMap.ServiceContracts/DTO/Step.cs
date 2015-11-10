@@ -15,7 +15,7 @@ namespace StepMap.ServiceContracts.DTO
         [DataMember]
         public DateTime Deadline { get; set; }
         [DataMember]
-        public DateTime FinishDate { get; set; }
+        public DateTime? FinishDate { get; set; }
         [DataMember]
         public int SentReminder { get; set; }
     }

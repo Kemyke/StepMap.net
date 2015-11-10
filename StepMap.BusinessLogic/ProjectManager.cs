@@ -1,5 +1,6 @@
 ﻿using StepMap.DAL;
 using System;
+using System.Data.Entity;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace StepMap.BusinessLogic
         {
             using (var ctx = new StepMapDbContext())
             {
-                return ctx.Projects.Where(p => p.UserId == user.Id);
+                return ctx.Projects.Where(p => p.UserId == user.Id).Include(s => s.NextStep).Include(s => s.FinishedSteps).Include(s => s.User).ToList();
             }
         }
     }

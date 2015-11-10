@@ -51,6 +51,10 @@
     <Compile Include="StepMapService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\StepMap.Common\StepMap.Common.csproj">
+      <Project>{b4acfcb5-fc47-40e1-8132-24cfb2fee147}</Project>
+      <Name>StepMap.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StepMap.DAL\StepMap.DAL.csproj">
       <Project>{f2285a65-ad8c-4065-8ded-cd9b90be93e4}</Project>
       <Name>StepMap.DAL</Name>

@@ -9,18 +9,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ServiceModel;
+using StepMap.Logger.Logging;
 
 namespace StepMap.ServiceImpl
 {
-    [ServiceBehavior(Namespace = "http://kemy.com", InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
+    [ServiceBehavior(Namespace = "http://kemy.com", InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple, AddressFilterMode = AddressFilterMode.Any)]
     public class StepMapService : IStepMapService
     {
+        private readonly ILogger logger;
         private readonly IProjectManager projectManager;
         private readonly IUserManager userManager;
         private readonly IOperationContextProvider operationContextProvider;
 
-        public StepMapService(IProjectManager projectManager, IUserManager userManager, IOperationContextProvider operationContextProvider)
+        public StepMapService(ILogger logger, IProjectManager projectManager, IUserManager userManager, IOperationContextProvider operationContextProvider)
         {
+            this.logger = logger;
             this.projectManager = projectManager;
             this.userManager = userManager;
             this.operationContextProvider = operationContextProvider;
@@ -28,6 +31,8 @@ namespace StepMap.ServiceImpl
 
         public IList<dto.Project> GetProjects()
         {
+            logger.Debug("GetProjects called");
+
             dal.User currentUser = operationContextProvider.CurrentUser;
             IEnumerable<dal.Project> projects = projectManager.GetProjects(currentUser);
 
