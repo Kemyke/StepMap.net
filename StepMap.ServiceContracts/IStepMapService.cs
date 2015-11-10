@@ -12,6 +12,9 @@ namespace StepMap.ServiceContracts
     [ServiceContract]
     public interface IStepMapService
     {
+        /// <summary>
+        /// Get projects
+        /// </summary>
         [OperationContract]
         [WebInvoke(Method = "GET", UriTemplate = "/projects", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         IList<Project> GetProjects();
