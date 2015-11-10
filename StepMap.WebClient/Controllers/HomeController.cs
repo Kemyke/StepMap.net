@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StepMap.WebClient.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,21 +11,13 @@ namespace StepMap.WebClient.Controllers
     {
         public ActionResult Index()
         {
-            return View();
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            ViewBag.Title = "Stepmap";
+            var vm = new UserStepMapViewModel { Projects = new List<ServiceContracts.DTO.Project>() };
+            for (int i = 0; i < 7; i++)
+            {
+                vm.Projects.Add(null);
+            }
+            return View(vm);
         }
     }
 }
