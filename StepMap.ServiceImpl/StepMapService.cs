@@ -36,7 +36,26 @@ namespace StepMap.ServiceImpl
             dal.User currentUser = operationContextProvider.CurrentUser;
             IEnumerable<dal.Project> projects = projectManager.GetProjects(currentUser);
 
-            return projects.Select(p => ProjectConverter.ConvertProject(p)).ToList();
+            return projects.Select(p => p == null ? null : ProjectConverter.ConvertProject(p)).ToList();
+        }
+
+
+        public void AddProject(dto.Project project)
+        {
+            dal.Project dalProj = ProjectConverter.ConvertProject(project);
+            dalProj.UserId = operationContextProvider.CurrentUser.Id;
+            projectManager.AddProject(dalProj);
+        }
+
+        public void UpdateProject(dto.Project project)
+        {
+            dal.Project dalProj = ProjectConverter.ConvertProject(project);
+            projectManager.UpdateProject(dalProj);
+        }
+
+        public void DeleteProject(int projectId)
+        {
+            projectManager.DeleteProject(projectId);
         }
     }
 }

@@ -19,5 +19,16 @@ namespace StepMap.ServiceImpl.Converters
             ret.SentReminder = step.SentReminder;
             return ret;
         }
+
+        public static dal.Step ConvertStep(dto.Step step)
+        {
+            dal.Step ret = new dal.Step();
+            ret.Deadline = step.Deadline;
+            ret.FinishDate = step.FinishDate;
+            ret.Name = step.Name;
+            ret.SentReminder = step.SentReminder;
+            return ret;
+        }
+
     }
 }

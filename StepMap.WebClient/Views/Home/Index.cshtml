@@ -1,63 +1,84 @@
 ﻿@using StepMap.WebClient.ViewModels
+@using StepMap.ServiceContracts.DTO
 @model UserStepMapViewModel
 
-<body>
-    <div id="main">
-        <div id="header"><p>Project</p><p>Next Step</p></div>
-        <ul id="project-list">
-            @foreach (var project in Model.Projects)
-            {
-                <li>
-                @if (project != null) { 
-                    <div class="project" style="position: relative; ">
-                        <div class="display">
-                            <label id="project-name">@project.Name</label>
-                        </div>
-                        <div class="edit">
-                            <input class="project-name-input" type="text" value="@project.Name" />
-                        </div>
+@{
+    var client = new WebClient();
+    client.Headers.Add(HttpRequestHeader.Authorization, "Basic a2VteTphZG1pbg==");
+    var json = client.DownloadString("http://localhost:55300/Service.svc/projects");
+    var localProjList = Json.Decode(json);
+ }
 
-                        <button id="terminate"></button>
-                    </div>
-                    <div class="step-out" style="background-position:  -<%= (200-progresswidth) %>px 0;">
-                        <div class="step" style="position: relative;right: -<%= progresswidth %>px;">
-                            <div class="stepname">
-                                <div class="display">
-                                    <label id="nextStep"><%= nextstep %></label>
-                                </div>
-                                <div class="edit">
-                                    <input class="nextstep-name-input" type="text" value="<%= nextstep %>" />
-                                </div>
-                            </div>
-                            <div class="stepdeadline">
-                                <div class="display">
-                                    <label id="deadline"><%= deadline %></label>
-                                </div>
-                                <div class="edit">
-                                    <input class="nextstep-deadline-input" type="text" type="text" id="datepicker" value="<%= deadline %>" />
-                                </div>
-                            </div>
-                            <button id="closeStep"></button>
-                        </div>
+        <body>
+            <div id="main">
+                <div id="header"><p>Project</p><p>Next Step</p></div>
+                <ul id="project-list">
+                    @{ int num = 0;}
+                    @foreach (var project in localProjList)
+                    {
+                        <li>
+                            @if (project != null)
+                            {
+                                var nextStep = project.FinishedSteps[project.FinishedSteps.Length - 1];
+                                var stepsWidth = project.FinishedSteps.Length * 10;
+                                var invStepsWidth = 200 - project.FinishedSteps.Length * 10;
+                                var days = (int)(DateTime.Now - project.StartDate).TotalDays;
+                                    
+                                <div class="projectcontainer">
+                                    <div class="project" style="position: relative; ">
+                                        <div class="display">
+                                            <label id="project-name">@project.Name</label>
+                                        </div>
+                                        <div class="edit">
+                                            <input class="project-name-input" type="text" value="@project.Name" />
+                                        </div>
 
-                    </div>
+                                        <button id="terminate"></button>
+                                    </div>
+                                    <div class="step-out" style="background-position: -@(invStepsWidth)px 0;">
+                                        <div class="step" style="position: relative;right: -@(stepsWidth)px;">
+                                            <div class="stepname">
+                                                <div class="display">
+                                                    <label id="nextStep">@nextStep.Name</label>
+                                                </div>
+                                                <div class="edit">
+                                                    <input class="nextstep-name-input" type="text" value="@nextStep.Name" />
+                                                </div>
+                                            </div>
+                                            <div class="stepdeadline">
+                                                <div class="display">
+                                                    <label id="deadline">@nextStep.Deadline</label>
+                                                </div>
+                                                <div class="edit">
+                                                    <input class="nextstep-deadline-input" type="text" id="datepicker" value="@nextStep.Deadline" />
+                                                </div>
+                                            </div>
+                                            <button id="closeStep"></button>
+                                        </div>
 
-                    <div class="vote" style="position: relative;right: -<%= progresswidth %>px;">
-                        <label id="days" style="color: #9f9fb0;position: relative; top:67px; left: 105px;"><%= days %></label>
-                        <label id="goods" style="color: #ef4035;position: relative; top:12px; left: 83px;"><%= goods %></label>
-                        <label id="bads" style="color: #ef4035; position: relative; top:67px; left: 20px;font-family: 'bignoodletitlingregular';"><%= bads %></label>
-                    </div>
-                }
-                else
-                {
-                    <div class="newprojectcontainer">
-                        <button id="newProject"></button>
-                    </div>
-                }
-                </li>
+                                    </div>
+
+                                    <div class="vote" style="position: relative;right: -@(stepsWidth)px;">
+                                        <label id="days" style="color: #9f9fb0;position: relative; top:67px; left: 105px;">@days</label>
+                                        <label id="goods" style="color: #ef4035;position: relative; top:12px; left: 83px;">@project.GoodPoint</label>
+                                        <label id="bads" style="color: #ef4035; position: relative; top:67px; left: 20px;font-family: 'bignoodletitlingregular';">@project.BadPoint</label>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="newprojectcontainer">
+                                    @using (Html.BeginForm("CreateProject", "Home", new { position = @num }, FormMethod.Post, null))
+                                    {
+                                        <button id="newProject" value="@num"></button>
+                                    }
+                                </div>
+                            }
+                        </li>
+                num++;
             }
-        </ul>
-        <div id="sidebar"><h1>StepMap</h1><img id="logo" src="@Url.Content("~/Content/Images/stepmap_logo_kis_img.png")"><p>Üdvözlünk!</p><a id="logout" href="logout">Kijelentkezés</a></div>
-    </div>
+                </ul>
+                <div id="sidebar"><h1>StepMap</h1><img id="logo" src="@Url.Content("~/Content/Images/stepmap_logo_kis_img.png")"><p>Üdvözlünk!</p><a id="logout" href="logout">Kijelentkezés</a></div>
+            </div>
 
-</body>
+        </body>

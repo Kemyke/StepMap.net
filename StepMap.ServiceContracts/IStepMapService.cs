@@ -18,5 +18,17 @@ namespace StepMap.ServiceContracts
         [OperationContract]
         [WebInvoke(Method = "GET", UriTemplate = "/projects", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         IList<Project> GetProjects();
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = "/projects", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        void AddProject(Project project);
+
+        [OperationContract]
+        [WebInvoke(Method = "PUT", UriTemplate = "/projects", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        void UpdateProject(Project project);
+
+        [OperationContract]
+        [WebInvoke(Method = "DELETE", UriTemplate = "/projects", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        void DeleteProject(int projectId);
     }
 }

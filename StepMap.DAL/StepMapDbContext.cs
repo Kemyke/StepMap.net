@@ -30,6 +30,7 @@ namespace StepMap.DAL
 
             modelBuilder.Entity<Project>().ToTable("Project");
             modelBuilder.Entity<Step>().ToTable("Step");
+
             modelBuilder.Entity<Project>()
                     .HasMany(e => e.FinishedSteps)
                     .WithRequired(e => e.Project)

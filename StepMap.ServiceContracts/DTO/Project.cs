@@ -11,6 +11,10 @@ namespace StepMap.ServiceContracts.DTO
     public class Project
     {
         [DataMember]
+        public int Id { get; set; }
+        [DataMember]
+        public int Position { get; set; }
+        [DataMember]
         public string Name { get; set; }
         [DataMember]
         public DateTime StartDate { get; set; }
@@ -20,8 +24,5 @@ namespace StepMap.ServiceContracts.DTO
         public int BadPoint { get; set; }
         [DataMember]
         public IList<Step> FinishedSteps { get; set; }
-        [DataMember]
-        public Step NextStep { get; set; }
-
     }
 }

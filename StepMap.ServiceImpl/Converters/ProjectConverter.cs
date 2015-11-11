@@ -13,12 +13,27 @@ namespace StepMap.ServiceImpl.Converters
         public static dto.Project ConvertProject(dal.Project project)
         {
             dto.Project ret = new dto.Project();
+            ret.Id = project.Id;
             ret.BadPoint = project.BadPoint;
             ret.GoodPoint = project.GoodPoint;
             ret.Name = project.Name;
             ret.StartDate = project.StartDate;
+            ret.Position = project.Position;
 
-            ret.NextStep = project.NextStep == null ? null : StepConverter.ConvertStep(project.NextStep);
+            ret.FinishedSteps = project.FinishedSteps.Select(s => StepConverter.ConvertStep(s)).ToList();
+            return ret;
+        }
+
+        public static dal.Project ConvertProject(dto.Project project)
+        {
+            dal.Project ret = new dal.Project();
+            ret.Id = project.Id;
+            ret.BadPoint = project.BadPoint;
+            ret.GoodPoint = project.GoodPoint;
+            ret.Name = project.Name;
+            ret.StartDate = project.StartDate;
+            ret.Position = project.Position;
+
             ret.FinishedSteps = project.FinishedSteps.Select(s => StepConverter.ConvertStep(s)).ToList();
             return ret;
         }

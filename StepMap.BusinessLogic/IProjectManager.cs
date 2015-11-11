@@ -10,5 +10,8 @@ namespace StepMap.BusinessLogic
     public interface IProjectManager
     {
         IEnumerable<Project> GetProjects(User user);
+        void AddProject(Project project);
+        void UpdateProject(Project project);
+        void DeleteProject(int projectId);
     }
 }
