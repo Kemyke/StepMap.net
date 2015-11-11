@@ -42,7 +42,7 @@ namespace StepMap.WebClient.Controllers
             string json = System.Web.Helpers.Json.Encode(p);
 
             client.UploadString("http://localhost:55300/Service.svc/projects", "POST", json);
-            return View();
+            return View("Index", new UserStepMapViewModel { Projects = new List<ServiceContracts.DTO.Project>() });
         }
     }
 }
