@@ -32,8 +32,10 @@
                                         <div class="edit">
                                             <input class="project-name-input" type="text" value="@project.Name" />
                                         </div>
-
+                                        @using (Html.BeginForm("CloseProject", "Home", new { projectId = @project.Id }, FormMethod.Post, null))
+                                        {
                                         <button id="terminate"></button>
+                                        }
                                     </div>
                                     <div class="step-out" style="background-position: -@(invStepsWidth)px 0;">
                                         <div class="step" style="position: relative;right: -@(stepsWidth)px;">
@@ -53,7 +55,10 @@
                                                     <input class="nextstep-deadline-input" type="text" id="datepicker" value="@nextStep.Deadline" />
                                                 </div>
                                             </div>
+                                            @using (Html.BeginForm("CloseStep", "Home", new { projectId = @project.Id }, FormMethod.Post, null))
+                                            {
                                             <button id="closeStep"></button>
+                                            }
                                         </div>
 
                                     </div>

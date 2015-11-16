@@ -38,7 +38,8 @@ namespace StepMap.BusinessLogic
         {
             using (var ctx = new StepMapDbContext())
             {
-                ctx.Projects.Attach(project);
+                project = ctx.Projects.Attach(project);
+                ctx.Steps.AddRange(project.FinishedSteps.Where(s => s.Id == 0));
                 ctx.SaveChanges();
             }
         }
@@ -47,13 +48,14 @@ namespace StepMap.BusinessLogic
         {
             using (var ctx = new StepMapDbContext())
             {
-                var project = ctx.Projects.SingleOrDefault(p=>p.Id == projectId);
+                var project = ctx.Projects.Include(s => s.FinishedSteps).SingleOrDefault(p => p.Id == projectId);
                 if (project == null)
                 {
                     throw new ArgumentException(string.Format("Project does not exsist: {0}.", projectId));
                 }
                 else
                 {
+                    ctx.Steps.RemoveRange(project.FinishedSteps);
                     ctx.Projects.Remove(project);
                     ctx.SaveChanges();
                 }

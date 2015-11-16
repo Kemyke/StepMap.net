@@ -15,7 +15,7 @@
 GO
 
 ALTER TABLE [stepmap].[Project]  WITH CHECK ADD  CONSTRAINT [FK_User_Project] FOREIGN KEY([UserId])
-REFERENCES [stepmap].[Project] ([Id])
+REFERENCES [stepmap].[User] ([Id])
 GO
 
 ALTER TABLE [stepmap].[Project] CHECK CONSTRAINT [FK_User_Project]

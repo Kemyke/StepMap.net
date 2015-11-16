@@ -16,6 +16,7 @@ namespace StepMap.DAL
 
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Step> Steps { get; set; }
 
         public StepMapDbContext()
             : base("name = StepMapDbContext")

@@ -13,6 +13,8 @@ namespace StepMap.ServiceImpl.Converters
         public static dto.Step ConvertStep(dal.Step step)
         {
             dto.Step ret = new dto.Step();
+            ret.Id = step.Id;
+            ret.ProjectId = step.ProjectId;
             ret.Deadline = step.Deadline;
             ret.FinishDate = step.FinishDate;
             ret.Name = step.Name;
@@ -23,6 +25,8 @@ namespace StepMap.ServiceImpl.Converters
         public static dal.Step ConvertStep(dto.Step step)
         {
             dal.Step ret = new dal.Step();
+            ret.Id = step.Id;
+            ret.ProjectId = step.ProjectId;
             ret.Deadline = step.Deadline;
             ret.FinishDate = step.FinishDate;
             ret.Name = step.Name;
