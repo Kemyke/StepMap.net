@@ -1,20 +1,21 @@
-﻿using Microsoft.Practices.Unity;
+﻿using StepMap.Common.DIContainer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Dispatcher;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace StepMap.WebHost
+namespace StepMap.WebHost.DIContainerHelpers
 {
-    public class CustomHostInstanceProvider: IInstanceProvider
+    public class DIContainerInstanceProvider : IInstanceProvider
     {
-        private readonly UnityContainer container;
+        private readonly IDIContainer container;
         private readonly Type contractType;
 
-        public CustomHostInstanceProvider(UnityContainer container, Type contractType)
+        public DIContainerInstanceProvider(IDIContainer container, Type contractType)
         {
             if (container == null)
             {
@@ -32,7 +33,7 @@ namespace StepMap.WebHost
 
         public object GetInstance(InstanceContext instanceContext, Message message)
         {
-            return container.Resolve(contractType);
+            return container.GetInstance(contractType);
         }
 
         public object GetInstance(InstanceContext instanceContext)
@@ -44,5 +45,4 @@ namespace StepMap.WebHost
         {
         }
     }
-
 }

@@ -1,23 +1,28 @@
-﻿using Microsoft.Practices.Unity;
-using Microsoft.Practices.Unity.Configuration;
+﻿using StepMap.Common.DIContainer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace StepMap.WebHost
+namespace StepMap.WebHost.DIContainerHelpers
 {
-    public class CustomHostFactory: ServiceHostFactory
+    /// <summary>
+    /// Creates singleton instaces of the service. 
+    /// Equals to InstanceContextMode.Single
+    /// </summary>
+    public class DIContainerSingleServiceHostFactory : ServiceHostFactory
     {
-        static CustomHostFactory()
+        static DIContainerSingleServiceHostFactory()
         {
-            container = new UnityContainer();
+            DIContainerFactory factory = new DIContainerFactory();
+            container = factory.CreateAndLoadDIContainer();
         }
 
         private static Dictionary<Type, object> cache = new Dictionary<Type,object>();
-        private static UnityContainer container = null;
+        private static IDIContainer container = null;
         private static bool isContainerInitialized = false;
 
         protected override ServiceHost CreateServiceHost(Type serviceType, Uri[] baseAddresses)
@@ -34,16 +39,15 @@ namespace StepMap.WebHost
                     }
                     if(!cache.TryGetValue(serviceType, out service))
                     {
-                        service = container.Resolve(serviceType);
+                        service = container.GetInstance(serviceType);
                         cache.Add(serviceType, service);
                     }
                 }
             }
 
-            return new CustomHost(container, service, baseAddresses);
+            return new DIContainerServiceHost(container, service, baseAddresses);
         }
 
-        protected virtual void Initialize(UnityContainer container) { container.LoadConfiguration(); }
+        protected virtual void Initialize(IDIContainer container) { }
     }  
-
 }

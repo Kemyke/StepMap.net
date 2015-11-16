@@ -1,2 +1,2 @@
 ﻿<%@ ServiceHost Language="C#" Debug="true" Service="StepMap.ServiceImpl.StepMapService" 
-    Factory="StepMap.WebHost.CustomHostFactory"%>
+    Factory="StepMap.WebHost.DIContainerHelpers.DIContainerSingleServiceHostFactory"%>

@@ -4,15 +4,16 @@ using System.Linq;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace StepMap.WebHost
+namespace StepMap.WebHost.DIContainerHelpers
 {
-    public class CustomHostContractBehavior: IContractBehavior
+    public class DIContainerContractBehavior : IContractBehavior
     {
         private readonly IInstanceProvider instanceProvider;
 
-        public CustomHostContractBehavior(IInstanceProvider instanceProvider)
+        public DIContainerContractBehavior(IInstanceProvider instanceProvider)
         {
             if (instanceProvider == null)
             {

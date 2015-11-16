@@ -84,10 +84,11 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomHost\CustomHost.cs" />
-    <Compile Include="CustomHost\CustomHostContractBehavior.cs" />
-    <Compile Include="CustomHost\CustomHostFactory.cs" />
-    <Compile Include="CustomHost\CustomHostInstanceProvider.cs" />
+    <Compile Include="DIContainerHelpers\DIContainerContractBehavior.cs" />
+    <Compile Include="DIContainerHelpers\DIContainerInstanceProvider.cs" />
+    <Compile Include="DIContainerHelpers\DIContainerServiceHost.cs" />
+    <Compile Include="DIContainerHelpers\DIContainerServiceHostFactory .cs" />
+    <Compile Include="DIContainerHelpers\DIContainerSingleServiceHostFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

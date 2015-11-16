@@ -1,4 +1,6 @@
 ﻿using StepMap.BusinessLogic;
+using StepMap.Common.DIContainer;
+using StepMap.Logger.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,18 +15,18 @@ namespace StepMap.ServiceImpl
 {
     public class MyServiceAuthorizationManager : ServiceAuthorizationManager
     {
-        //private ILogger logger;
+        private ILogger logger;
         private IUserManager userManager;
 
         private const string AuthHeaderKey = "Authorization";
 
         public MyServiceAuthorizationManager()
         {
-            //DIContainerFactory factory = new DIContainerFactory();
-            //IDIContainer diContainer = factory.CreateAndLoadDIContainer();
+            DIContainerFactory factory = new DIContainerFactory();
+            IDIContainer diContainer = factory.CreateAndLoadDIContainer();
 
-            //logger = diContainer.GetInstance<ILogger>();
-            //userManager = diContainer.GetInstance<IUserManager>();
+            logger = diContainer.GetInstance<ILogger>();
+            userManager = diContainer.GetInstance<IUserManager>();
             userManager = new UserManager();
         }
 
@@ -69,7 +71,7 @@ namespace StepMap.ServiceImpl
             }
             catch (Exception ex)
             {
-                //logger.Error(ex.ToString());
+                logger.Error(ex.ToString());
                 throw new WebFaultException(HttpStatusCode.Unauthorized);
             }
         }

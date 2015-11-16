@@ -1,30 +1,31 @@
-﻿using Microsoft.Practices.Unity;
+﻿using StepMap.Common.DIContainer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Description;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace StepMap.WebHost
+namespace StepMap.WebHost.DIContainerHelpers
 {
-    public class CustomHost: ServiceHost
+    public class DIContainerServiceHost : ServiceHost
     {
-        protected UnityContainer container = null;
+        protected IDIContainer container = null;
 
-        public CustomHost(UnityContainer container, Type serviceType, params Uri[] baseAddresses)
+        public DIContainerServiceHost(IDIContainer container, Type serviceType, params Uri[] baseAddresses)
             : base(serviceType, baseAddresses)
         {
             Initialize(container);
         }
 
-        public CustomHost(UnityContainer container, object instance, params Uri[] baseAddresses)
+        public DIContainerServiceHost(IDIContainer container, object instance, params Uri[] baseAddresses)
             : base(instance, baseAddresses)
         {
             Initialize(container);
         }
 
-        private void Initialize(UnityContainer container)
+        private void Initialize(IDIContainer container)
         {
             if (container == null)
             {
@@ -39,15 +40,15 @@ namespace StepMap.WebHost
 
             foreach (var contractDescription in ImplementedContracts.Values)
             {
-                var contractBehavior = new CustomHostContractBehavior(new CustomHostInstanceProvider(container, contractDescription.ContractType));
+                var contractBehavior = new DIContainerContractBehavior(new DIContainerInstanceProvider(container, contractDescription.ContractType));
 
                 contractDescription.Behaviors.Add(contractBehavior);
             }
         }
 
-        private void ApplyContractBehaviors(UnityContainer container)
+        private void ApplyContractBehaviors(IDIContainer container)
         {
-            var registeredContractBehaviors = container.ResolveAll<IContractBehavior>();
+            var registeredContractBehaviors = container.GetAllInstance<IContractBehavior>();
 
             foreach (var contractBehavior in registeredContractBehaviors)
             {
@@ -58,9 +59,9 @@ namespace StepMap.WebHost
             }
         }
 
-        private void ApplyServiceBehaviors(UnityContainer container)
+        private void ApplyServiceBehaviors(IDIContainer container)
         {
-            var registeredServiceBehaviors = container.ResolveAll<IServiceBehavior>();
+            var registeredServiceBehaviors = container.GetAllInstance<IServiceBehavior>();
 
             foreach (var serviceBehavior in registeredServiceBehaviors)
             {
@@ -68,5 +69,4 @@ namespace StepMap.WebHost
             }
         }
     }
-
 }
