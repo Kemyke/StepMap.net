@@ -14,6 +14,7 @@ namespace StepMap.ServiceImpl.Converters
         {
             dto.Project ret = new dto.Project();
             ret.Id = project.Id;
+            ret.UserId = project.UserId;
             ret.BadPoint = project.BadPoint;
             ret.GoodPoint = project.GoodPoint;
             ret.Name = project.Name;
@@ -28,6 +29,7 @@ namespace StepMap.ServiceImpl.Converters
         {
             dal.Project ret = new dal.Project();
             ret.Id = project.Id;
+            ret.UserId = project.UserId;
             ret.BadPoint = project.BadPoint;
             ret.GoodPoint = project.GoodPoint;
             ret.Name = project.Name;

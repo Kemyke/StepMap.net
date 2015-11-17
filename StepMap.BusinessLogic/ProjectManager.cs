@@ -39,6 +39,7 @@ namespace StepMap.BusinessLogic
             using (var ctx = new StepMapDbContext())
             {
                 project = ctx.Projects.Attach(project);
+                ctx.Entry(project).State = EntityState.Modified;
                 ctx.Steps.AddRange(project.FinishedSteps.Where(s => s.Id == 0));
                 ctx.SaveChanges();
             }

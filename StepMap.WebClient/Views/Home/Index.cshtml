@@ -9,6 +9,32 @@
     var localProjList = Json.Decode(json);
  }
 
+        <script type="text/javascript">
+            function editProjectName()
+            {
+                this.$('.project').addClass("editing");
+                this.$('.project-name-input').focus();
+            }
+
+            function closeEditProjectName(projectId, name)
+            {
+                $.ajax({
+                    url: '@Url.Action("SetProjectName", "Home")',
+                    type: 'GET',
+                    dataType: 'json',
+                    // we set cache: false because GET requests are often cached by browsers
+                    // IE is particularly aggressive in that respect
+                    cache: false,
+                    data: { projectId: projectId, name: name },
+                    success: function () {
+                    }
+                });
+
+                this.$('.project').removeClass("editing");
+                this.$('#project-name').text(name);
+            }
+        </script>
+
         <body>
             <div id="main">
                 <div id="header"><p>Project</p><p>Next Step</p></div>
@@ -26,11 +52,11 @@
                                     
                                 <div class="projectcontainer">
                                     <div class="project" style="position: relative; ">
-                                        <div class="display">
+                                        <div class="display" ondblclick="editProjectName();">
                                             <label id="project-name">@project.Name</label>
                                         </div>
                                         <div class="edit">
-                                            <input class="project-name-input" type="text" value="@project.Name" />
+                                            <input class="project-name-input" type="text" onblur="closeEditProjectName(@project.Id, document.getElementsByClassName('project-name-input')[0].value);" value="@project.Name" />
                                         </div>
                                         @using (Html.BeginForm("CloseProject", "Home", new { projectId = @project.Id }, FormMethod.Post, null))
                                         {

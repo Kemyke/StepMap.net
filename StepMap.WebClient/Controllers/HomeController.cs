@@ -32,6 +32,21 @@ namespace StepMap.WebClient.Controllers
             return client;
         }
 
+        public ActionResult SetProjectName(int projectId, string name)
+        {
+            var c = CreateClient();
+            var x = c.DownloadString("http://localhost:55300/Service.svc/projects");
+            var z = System.Web.Helpers.Json.Decode<List<Project>>(x);
+            var p = z.Single(tp => tp != null && tp.Id == projectId);
+
+            var client = CreateClient();
+            p.Name = name;
+            string json = System.Web.Helpers.Json.Encode(p);
+            client.UploadString("http://localhost:55300/Service.svc/projects", "PUT", json);            
+            
+            return View("Index", new UserStepMapViewModel { Projects = new List<ServiceContracts.DTO.Project>() });
+        }
+
         public ActionResult CloseProject(int projectId)
         {
             var client = CreateClient();
