@@ -2,13 +2,6 @@
 @using StepMap.ServiceContracts.DTO
 @model UserStepMapViewModel
 
-@{
-    var client = new WebClient();
-    client.Headers.Add(HttpRequestHeader.Authorization, "Basic a2VteTphZG1pbg==");
-    var json = client.DownloadString("http://localhost:55300/Service.svc/projects");
-    var localProjList = Json.Decode(json);
- }
-
         <script type="text/javascript">
             function editProjectName()
             {
@@ -40,14 +33,14 @@
                 <div id="header"><p>Project</p><p>Next Step</p></div>
                 <ul id="project-list">
                     @{ int num = 0;}
-                    @foreach (var project in localProjList)
+                    @foreach (var project in Model.Projects)
                     {
                         <li>
                             @if (project != null)
                             {
-                                var nextStep = project.FinishedSteps[project.FinishedSteps.Length - 1];
-                                var stepsWidth = project.FinishedSteps.Length * 10;
-                                var invStepsWidth = 200 - project.FinishedSteps.Length * 10;
+                                var nextStep = project.FinishedSteps[project.FinishedSteps.Count - 1];
+                                var stepsWidth = project.FinishedSteps.Count * 10;
+                                var invStepsWidth = 200 - project.FinishedSteps.Count * 10;
                                 var days = (int)(DateTime.Now - project.StartDate).TotalDays;
                                     
                                 <div class="projectcontainer">
