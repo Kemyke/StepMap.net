@@ -11,5 +11,6 @@ namespace StepMap.BusinessLogic
     {
         bool IsPasswordValid(string userName, string pwdHash);
         User GetUser(string userName);
+        void Register(string userName, string email, string pwdHash);
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StepMap.BusinessLogic
 {
-   public  class UserManager :IUserManager
+    public class UserManager : IUserManager
     {
         public bool IsPasswordValid(string userName, string pwdHash)
         {
@@ -20,7 +20,7 @@ namespace StepMap.BusinessLogic
 
         public DAL.User GetUser(string userName)
         {
-            using(var ctx = new StepMapDbContext())
+            using (var ctx = new StepMapDbContext())
             {
                 var user = ctx.Users.Where(u => u.Name == userName).SingleOrDefault();
                 if (user == null)
@@ -31,6 +31,16 @@ namespace StepMap.BusinessLogic
                 {
                     return user;
                 }
+            }
+        }
+
+        public void Register(string userName, string email, string pwdHash)
+        {
+            using (var ctx = new StepMapDbContext())
+            {
+                User user = new User() { Name = userName, Email = email, PasswordHash = pwdHash };
+                ctx.Users.Add(user);
+                ctx.SaveChanges();
             }
         }
     }

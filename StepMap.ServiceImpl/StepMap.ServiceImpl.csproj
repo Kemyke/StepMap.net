@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Authentication\MyServiceAuthorizationManager.cs" />
     <Compile Include="Converters\ProjectConverter.cs" />
+    <Compile Include="Converters\UserConverter.cs" />
     <Compile Include="Converters\StepConverter.cs" />
     <Compile Include="DefaultOperationContextProvider.cs" />
     <Compile Include="IOperationContextProvider.cs" />

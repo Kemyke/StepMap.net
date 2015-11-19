@@ -57,5 +57,18 @@ namespace StepMap.ServiceImpl
         {
             projectManager.DeleteProject(projectId);
         }
+
+
+        public dto.User Login()
+        {
+            dto.User ret;
+            ret = UserConverter.ConvertUser(operationContextProvider.CurrentUser);
+            return ret;
+        }
+
+        public void Register(string userName, string email, string password)
+        {
+            userManager.Register(userName, email, password);
+        }
     }
 }

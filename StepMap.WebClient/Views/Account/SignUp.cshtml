@@ -1,0 +1,25 @@
+﻿<div id="signup-body">
+    <div id="signup-box">
+        <img id="signup-logo" src="@Url.Content("~/Content/Images/login_logo_img.png")" width="204" height="29" alt="Stepmap logo" title="Stepmap logo" />
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post, null))
+        { 
+            <div>
+                <input type="text" name="username" value="username" onfocus="if(this.value==this.defaultValue)this.value='';" onblur="if(this.value=='')this.value=this.defaultValue;" />
+            </div>
+            <div>
+                <input type="text" name="email" value="email" onfocus="if(this.value==this.defaultValue)this.value='';" onblur="if(this.value=='')this.value=this.defaultValue;" />
+            </div>
+            <div>
+                <input type="submit" value="Register" />
+            </div>
+            <div>
+                <div class="password">
+                    <input class="passwd" type="password" name="password" value="password" onfocus="if(this.value==this.defaultValue)this.value='';" onblur="if(this.value=='')this.value=this.defaultValue;" />
+                </div>
+                <div>
+                    <input class="passwd" type="password" name="passwordcheck" value="password check" onfocus="if(this.value==this.defaultValue)this.value='';" onblur="if(this.value=='')this.value=this.defaultValue;" />
+                </div>
+            </div>
+        }
+    </div>
+</div>

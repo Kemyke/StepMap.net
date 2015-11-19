@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -19,5 +20,16 @@ namespace StepMap.WebClient
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+
+        protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)
+        {
+            if (CurrentUser != null)
+            {
+                HttpContext.Current.User = CurrentUser;
+            }
+        }
+
+        public static string AuthorizationHeader = string.Empty;
+        public static IPrincipal CurrentUser = null;
     }
 }

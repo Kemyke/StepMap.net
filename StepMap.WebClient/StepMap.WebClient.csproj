@@ -148,8 +148,10 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="CustomAuthorizeAttribute.cs" />
+    <Compile Include="CustomPrincipal.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -272,8 +274,14 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\SignUp.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\StepMap.Common\StepMap.Common.csproj">
+      <Project>{b4acfcb5-fc47-40e1-8132-24cfb2fee147}</Project>
+      <Name>StepMap.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StepMap.ServiceContracts\StepMap.ServiceContracts.csproj">
       <Project>{61d40960-f656-4544-a6b5-09dbc5bad2c6}</Project>
       <Name>StepMap.ServiceContracts</Name>

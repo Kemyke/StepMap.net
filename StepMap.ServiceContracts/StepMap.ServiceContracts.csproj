@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="DTO\Project.cs" />
     <Compile Include="DTO\Step.cs" />
+    <Compile Include="DTO\User.cs" />
     <Compile Include="IStepMapService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

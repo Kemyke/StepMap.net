@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace StepMap.WebClient.Controllers
 {
+    [CustomAuthorize]
     public class HomeController : Controller
     {
         private static string ApiAddress = ConfigurationManager.AppSettings["ApiAddress"];
@@ -33,7 +34,8 @@ namespace StepMap.WebClient.Controllers
             var client = new System.Net.WebClient();
             client.Headers.Add("Content-Type", "application/json");
             client.Encoding = Encoding.UTF8;
-            client.Headers.Add(HttpRequestHeader.Authorization, "Basic a2VteTphZG1pbg==");
+            client.Headers.Add(HttpRequestHeader.Authorization, WebApiApplication.AuthorizationHeader);//"Basic a2VteTphZG1pbg==");
+
             return client;
         }
 

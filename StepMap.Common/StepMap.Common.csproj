@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CryptoHelper.cs" />
     <Compile Include="DIContainer\IDIContainer.cs" />
     <Compile Include="DIContainer\LifetimeTypes.cs" />
     <Compile Include="DIContainer\DIContainerFactory.cs" />

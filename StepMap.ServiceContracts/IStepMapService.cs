@@ -30,5 +30,13 @@ namespace StepMap.ServiceContracts
         [OperationContract]
         [WebInvoke(Method = "DELETE", UriTemplate = "/projects", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         void DeleteProject(int projectId);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", UriTemplate = "/accounts", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        User Login();
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", UriTemplate = "/accounts", BodyStyle=WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        void Register(string userName, string email, string password);
     }
 }
