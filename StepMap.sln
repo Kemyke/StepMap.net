@@ -21,6 +21,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StepMap.Common", "StepMap.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StepMap.WebClient", "StepMap.WebClient\StepMap.WebClient.csproj", "{26FE6FA4-701A-4346-BF2B-DAC72B8B096E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{904EC20B-C277-41FD-81BD-4E82F2142DBA}"
+	ProjectSection(SolutionItems) = preProject
+		SolutionItems\client_secret_114882284440-unrvt3i9sbfakciqr3rv2a4cs476321d.apps.googleusercontent.com.json = SolutionItems\client_secret_114882284440-unrvt3i9sbfakciqr3rv2a4cs476321d.apps.googleusercontent.com.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
