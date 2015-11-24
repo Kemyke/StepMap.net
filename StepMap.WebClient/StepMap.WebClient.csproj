@@ -253,6 +253,7 @@
     <Content Include="fonts\web_serveroff-webfont.eot" />
     <Content Include="fonts\web_serveroff-webfont.ttf" />
     <Content Include="fonts\web_serveroff-webfont.woff" />
+    <None Include="Properties\PublishProfiles\stepmap.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
