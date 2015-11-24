@@ -47,12 +47,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Scripts\20151109_02_Step.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Scripts\20151109_03_Project.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Scripts\20151109_00_Schema.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -61,6 +55,10 @@
     <None Include="Scripts\20151109_04_DefaultUser.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\20151109_02_Project.sql" />
+    <Content Include="Scripts\20151109_03_Step.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
