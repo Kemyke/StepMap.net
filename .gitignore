@@ -188,3 +188,4 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 /StepMap.WebHost/Logs
+/StepMap.WebHost/Configs/DbConnectionsRelease.config
