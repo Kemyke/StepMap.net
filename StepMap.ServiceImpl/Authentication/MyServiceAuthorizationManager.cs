@@ -1,6 +1,8 @@
 ﻿using StepMap.BusinessLogic;
+using StepMap.Common;
 using StepMap.Common.DIContainer;
 using StepMap.Logger.Logging;
+using StepMap.ServiceContracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +21,7 @@ namespace StepMap.ServiceImpl
         private IUserManager userManager;
 
         private const string AuthHeaderKey = "Authorization";
+        private readonly Type serviceContractType = typeof(IStepMapService);
 
         public MyServiceAuthorizationManager()
         {
@@ -32,18 +35,23 @@ namespace StepMap.ServiceImpl
 
         protected override bool CheckAccessCore(OperationContext operationContext)
         {
-            //return true;
             try
             {
                 string authHeader = null;
 
                 // ignore authentication for GetVersionInfo call
                 MessageProperties msgProps = OperationContext.Current.IncomingMessageProperties;
-                if (msgProps != null &&
-                    msgProps.ContainsKey("HttpOperationName") &&
-                    msgProps["HttpOperationName"].ToString() == "GetVersionInfo")
+
+                //TODO: do not hardcode interface type, use somthing like: OperationContext.Current.EndpointDispatcher.DispatchRuntime.Type.GetInterfaces()
+                //Only works with distinct metthod names (no overload allowed)
+                if (msgProps != null && msgProps.ContainsKey("HttpOperationName"))
                 {
-                    return base.CheckAccessCore(operationContext);
+                    string methodName = msgProps["HttpOperationName"].ToString();
+                    var mi = serviceContractType.GetMethod(methodName);
+                    if (mi != null && mi.GetCustomAttributes(typeof(DoNotAuthorizeAttribute), false).Any())
+                    {
+                        return base.CheckAccessCore(operationContext);
+                    }
                 }
 
                 authHeader = WebOperationContext.Current.IncomingRequest.Headers.Get(AuthHeaderKey);

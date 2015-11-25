@@ -1,4 +1,5 @@
-﻿using StepMap.ServiceContracts.DTO;
+﻿using StepMap.Common;
+using StepMap.ServiceContracts.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,7 @@ namespace StepMap.ServiceContracts
         User Login();
 
         [OperationContract]
+        [DoNotAuthorizeAttribute]
         [WebInvoke(Method = "POST", UriTemplate = "/accounts", BodyStyle=WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         void Register(string userName, string email, string password);
     }

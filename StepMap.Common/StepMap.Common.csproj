@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DoNotAuthorizeAttribute.cs" />
     <Compile Include="CryptoHelper.cs" />
     <Compile Include="DIContainer\IDIContainer.cs" />
     <Compile Include="DIContainer\LifetimeTypes.cs" />
