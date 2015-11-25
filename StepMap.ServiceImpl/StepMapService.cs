@@ -27,6 +27,8 @@ namespace StepMap.ServiceImpl
             this.projectManager = projectManager;
             this.userManager = userManager;
             this.operationContextProvider = operationContextProvider;
+
+            logger.Info("{0} created!", this.GetType().Name);
         }
 
         public IList<dto.Project> GetProjects()
