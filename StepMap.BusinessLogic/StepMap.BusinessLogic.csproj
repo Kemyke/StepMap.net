@@ -121,10 +121,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\SolutionItems\client_secret_114882284440-unrvt3i9sbfakciqr3rv2a4cs476321d.apps.googleusercontent.com.json">
-      <Link>client_secret_114882284440-unrvt3i9sbfakciqr3rv2a4cs476321d.apps.googleusercontent.com.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
