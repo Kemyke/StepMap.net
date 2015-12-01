@@ -65,6 +65,8 @@
     <Compile Include="Logger\Logging\ILogger.cs" />
     <Compile Include="Logger\Logging\LogEventBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegexHelpers\IRegexHelper.cs" />
+    <Compile Include="RegexHelpers\RegexHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

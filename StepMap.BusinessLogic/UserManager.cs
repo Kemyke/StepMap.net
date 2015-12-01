@@ -1,4 +1,6 @@
-﻿using StepMap.DAL;
+﻿using StepMap.Common.RegexHelpers;
+using StepMap.DAL;
+using StepMap.Logger.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,14 @@ namespace StepMap.BusinessLogic
 {
     public class UserManager : IUserManager
     {
+        private readonly ILogger logger;
+        private readonly IRegexHelper regexHelper;
+        public UserManager(ILogger logger, IRegexHelper regexHelper)
+        {
+            this.logger = logger;
+            this.regexHelper = regexHelper;
+        }
+
         public bool IsPasswordValid(string userName, string pwdHash)
         {
             using (var ctx = new StepMapDbContext())
@@ -36,14 +46,21 @@ namespace StepMap.BusinessLogic
 
         public void Register(string userName, string email, string pwdHash)
         {
-            using (var ctx = new StepMapDbContext())
+            bool isValid = regexHelper.IsValidEmail(email);
+            if (isValid)
             {
-                User user = new User() { Name = userName, Email = email, PasswordHash = pwdHash };
-                ctx.Users.Add(user);
-                ctx.SaveChanges();
+                using (var ctx = new StepMapDbContext())
+                {
+                    User user = new User() { Name = userName, Email = email, PasswordHash = pwdHash };
+                    ctx.Users.Add(user);
+                    ctx.SaveChanges();
+                }
+            }
+            else
+            {
+                logger.Warning("Attempt to register invalid email: {0}! Username: {1}.", email, userName);
             }
         }
-
 
         public void Login(User user)
         {
