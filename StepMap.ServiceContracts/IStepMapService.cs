@@ -18,27 +18,27 @@ namespace StepMap.ServiceContracts
         /// </summary>
         [OperationContract]
         [WebInvoke(Method = "GET", UriTemplate = "/projects", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        IList<Project> GetProjects();
+        Response<IList<Project>> GetProjects();
 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/projects", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        void AddProject(Project project);
+        Response AddProject(Project project);
 
         [OperationContract]
         [WebInvoke(Method = "PUT", UriTemplate = "/projects", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        void UpdateProject(Project project);
+        Response UpdateProject(Project project);
 
         [OperationContract]
         [WebInvoke(Method = "DELETE", UriTemplate = "/projects", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        void DeleteProject(int projectId);
+        Response DeleteProject(int projectId);
 
         [OperationContract]
         [WebInvoke(Method = "GET", UriTemplate = "/accounts", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        User Login();
+        Response<User> Login();
 
         [OperationContract]
         [DoNotAuthorizeAttribute]
         [WebInvoke(Method = "POST", UriTemplate = "/accounts", BodyStyle=WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        void Register(string userName, string email, string password);
+        Response Register(string userName, string email, string password);
     }
 }

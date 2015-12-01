@@ -1,4 +1,6 @@
-﻿using StepMap.ServiceContracts.DTO;
+﻿using StepMap.Common;
+using StepMap.ServiceContracts;
+using StepMap.ServiceContracts.DTO;
 using StepMap.WebClient.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -22,10 +24,17 @@ namespace StepMap.WebClient.Controllers
         {
             var client = CreateClient();
             var json = client.DownloadString(Address);
-            var projects = System.Web.Helpers.Json.Decode<List<Project>>(json);
+            var resp = System.Web.Helpers.Json.Decode<Response<IList<Project>>>(json);
 
             var vm = new UserStepMapViewModel();
-            vm.Projects = projects;
+            if (resp.ResultCode == ResultCode.OK)
+            {
+                vm.Projects = resp.Result;
+            }
+            else
+            {
+                //TODO: error handling
+            }
             return vm;
         }
 
@@ -56,6 +65,8 @@ namespace StepMap.WebClient.Controllers
             var client = CreateClient();
             p.Name = name;
             string json = System.Web.Helpers.Json.Encode(p);
+
+            //TODO: error handling
             client.UploadString(Address, "PUT", json);
 
             return View("Index", GetProjects());
@@ -66,6 +77,7 @@ namespace StepMap.WebClient.Controllers
             var client = CreateClient();
             string json = System.Web.Helpers.Json.Encode(projectId);
 
+            //TODO: error handling
             client.UploadString(Address, "DELETE", json);
             return View("Index", GetProjects());
         }
@@ -88,6 +100,7 @@ namespace StepMap.WebClient.Controllers
 
             string json = System.Web.Helpers.Json.Encode(p);
 
+            //TODO: error handling
             client.UploadString(Address, "PUT", json);
             return View("Index", GetProjects());
         }
@@ -107,6 +120,7 @@ namespace StepMap.WebClient.Controllers
             };
             string json = System.Web.Helpers.Json.Encode(p);
 
+            //TODO: error handling
             client.UploadString(Address, "POST", json);
             return View("Index", GetProjects());
         }

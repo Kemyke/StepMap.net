@@ -8,6 +8,6 @@ namespace StepMap.WebClient.ViewModels
 {
     public class UserStepMapViewModel
     {
-        public List<Project> Projects { get; set; }
+        public IList<Project> Projects { get; set; }
     }
 }

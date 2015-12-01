@@ -1,6 +1,7 @@
 ﻿using StepMap.BusinessLogic;
 using StepMap.Common;
 using StepMap.Common.DIContainer;
+using StepMap.Common.RegexHelpers;
 using StepMap.Logger.Logging;
 using StepMap.ServiceContracts;
 using System;
@@ -28,9 +29,10 @@ namespace StepMap.ServiceImpl
             DIContainerFactory factory = new DIContainerFactory();
             IDIContainer diContainer = factory.CreateAndLoadDIContainer();
 
+            var regexHelper = diContainer.GetInstance<IRegexHelper>();
             logger = diContainer.GetInstance<ILogger>();
             userManager = diContainer.GetInstance<IUserManager>();
-            userManager = new UserManager();
+            userManager = new UserManager(logger, regexHelper);
         }
 
         protected override bool CheckAccessCore(OperationContext operationContext)

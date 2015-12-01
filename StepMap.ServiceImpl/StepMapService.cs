@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ServiceModel;
 using StepMap.Logger.Logging;
+using StepMap.Common;
 
 namespace StepMap.ServiceImpl
 {
@@ -31,46 +32,96 @@ namespace StepMap.ServiceImpl
             logger.Info("{0} created!", this.GetType().Name);
         }
 
-        public IList<dto.Project> GetProjects()
+        public Response<IList<dto.Project>> GetProjects()
         {
-            logger.Debug("GetProjects called");
+            return WrapResponse<IList<dto.Project>>(() =>
+            {
+                logger.Debug("GetProjects called");
 
-            dal.User currentUser = operationContextProvider.CurrentUser;
-            IEnumerable<dal.Project> projects = projectManager.GetProjects(currentUser);
+                dal.User currentUser = operationContextProvider.CurrentUser;
+                IEnumerable<dal.Project> projects = projectManager.GetProjects(currentUser);
 
-            return projects.Select(p => p == null ? null : ProjectConverter.ConvertProject(p)).ToList();
+                return projects.Select(p => p == null ? null : ProjectConverter.ConvertProject(p)).ToList();
+            });
         }
 
 
-        public void AddProject(dto.Project project)
+        public Response AddProject(dto.Project project)
         {
-            dal.Project dalProj = ProjectConverter.ConvertProject(project);
-            dalProj.UserId = operationContextProvider.CurrentUser.Id;
-            projectManager.AddProject(dalProj);
+            return WrapResponse(() =>
+            {
+                dal.Project dalProj = ProjectConverter.ConvertProject(project);
+                dalProj.UserId = operationContextProvider.CurrentUser.Id;
+                projectManager.AddProject(dalProj);
+
+            });
         }
 
-        public void UpdateProject(dto.Project project)
+        public Response UpdateProject(dto.Project project)
         {
-            dal.Project dalProj = ProjectConverter.ConvertProject(project);
-            projectManager.UpdateProject(dalProj);
+            return WrapResponse(() =>
+            {
+                dal.Project dalProj = ProjectConverter.ConvertProject(project);
+                projectManager.UpdateProject(dalProj);
+            });
         }
 
-        public void DeleteProject(int projectId)
+        public Response DeleteProject(int projectId)
         {
-            projectManager.DeleteProject(projectId);
+            return WrapResponse(() =>
+            {
+                projectManager.DeleteProject(projectId);
+            });
         }
 
 
-        public dto.User Login()
+        public Response<dto.User> Login()
         {
-            dto.User ret;
-            ret = UserConverter.ConvertUser(operationContextProvider.CurrentUser);
-            return ret;
+            return WrapResponse(() =>
+                {
+                    dto.User ret;
+                    ret = UserConverter.ConvertUser(operationContextProvider.CurrentUser);
+                    return ret;
+                });
         }
 
-        public void Register(string userName, string email, string password)
+        public Response Register(string userName, string email, string password)
         {
-            userManager.Register(userName, email, password);
+            return WrapResponse(() =>
+                {
+                    userManager.Register(userName, email, password);
+                });
+        }
+
+        private Response<T> WrapResponse<T>(Func<T> a)
+        {
+            ResultCode rc = ResultCode.OK;
+            T ret = default(T);
+            try
+            {
+                ret = a();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex.ToString());
+                rc = ResultCode.UNKOWN_ERROR;
+            }
+            return new Response<T>(rc, ret);
+        }
+
+        private Response WrapResponse(Action a)
+        {
+            ResultCode rc = ResultCode.OK;
+            try
+            {
+                a();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex.ToString());
+                rc = ResultCode.UNKOWN_ERROR;
+            }
+            return new Response(rc);
         }
     }
 }

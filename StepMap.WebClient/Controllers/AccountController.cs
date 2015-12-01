@@ -1,4 +1,5 @@
 ﻿using StepMap.Common;
+using StepMap.ServiceContracts;
 using StepMap.ServiceContracts.DTO;
 using System;
 using System.Collections.Generic;
@@ -55,11 +56,19 @@ namespace StepMap.WebClient.Controllers
             var client = CreateClient();
             
             var json = client.DownloadString(Address);
-            var user = System.Web.Helpers.Json.Decode<User>(json);
-            var p = CreatePrincipal(user);
-            WebApiApplication.CurrentUser = p;
+            var resp = System.Web.Helpers.Json.Decode<Response<User>>(json);
 
-            return RedirectToAction("Index", "Home");
+            if (resp.ResultCode == ResultCode.OK)
+            {
+                var p = CreatePrincipal(resp.Result);
+                WebApiApplication.CurrentUser = p;
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                //TODO: Error handling
+                return View("Index");
+            }
         }
 
         public ActionResult SignUp()
