@@ -43,5 +43,16 @@ namespace StepMap.BusinessLogic
                 ctx.SaveChanges();
             }
         }
+
+
+        public void Login(User user)
+        {
+            using (var ctx = new StepMapDbContext())
+            {
+                user = ctx.Users.Attach(user);
+                user.LastLogin = DateTime.UtcNow;
+                ctx.SaveChanges();
+            }
+        }
     }
 }
