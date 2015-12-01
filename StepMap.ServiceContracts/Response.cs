@@ -11,6 +11,12 @@ namespace StepMap.ServiceContracts
     [DataContract]
     public class Response
     {
+        //TODO: remove
+        /// <summary>
+        /// DO NOT USE! THIS CONSTRUCTOR IS JUST FOR SERIALIZATION
+        /// </summary>
+        public Response() { }
+
         public Response(ResultCode resultCode)
         {
             ResultCode = resultCode;
@@ -23,6 +29,12 @@ namespace StepMap.ServiceContracts
     [DataContract]
     public class Response<T> : Response
     {
+        //TODO: remove
+        /// <summary>
+        /// DO NOT USE! THIS CONSTRUCTOR IS JUST FOR SERIALIZATION
+        /// </summary>
+        public Response() { }
+
         public Response(ResultCode resultCode, T result)
             : base(resultCode)
         {
