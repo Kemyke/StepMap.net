@@ -88,6 +88,7 @@ namespace StepMap.BusinessLogic
                     {
                         SentFirstReminder(project.User);
                         ctx.Projects.Attach(project);
+                        //TODO: Store full reminders not just an integer
                         currentStep.SentReminder = 1;
                     }
                 }

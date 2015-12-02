@@ -44,6 +44,7 @@ namespace StepMap.BusinessLogic
             }
         }
 
+        //TODO: confirm email
         public void Register(string userName, string email, string pwdHash)
         {
             bool isValid = regexHelper.IsValidEmail(email);
@@ -62,6 +63,7 @@ namespace StepMap.BusinessLogic
             }
         }
 
+        //TODO: add user state and role
         public void Login(User user)
         {
             using (var ctx = new StepMapDbContext())
