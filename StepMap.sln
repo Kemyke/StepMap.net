@@ -21,8 +21,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StepMap.Common", "StepMap.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StepMap.WebClient", "StepMap.WebClient\StepMap.WebClient.csproj", "{26FE6FA4-701A-4346-BF2B-DAC72B8B096E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{904EC20B-C277-41FD-81BD-4E82F2142DBA}"
-EndProject
 Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "StepMap.CloudServiceContent", "StepMap.CloudServiceContent\StepMap.CloudServiceContent.ccproj", "{D0A570A9-2D32-4016-85A2-4B8CC740E53D}"
 EndProject
 Global

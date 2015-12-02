@@ -10,6 +10,13 @@ namespace StepMap.BusinessLogic
 {
     public class ProjectManager : IProjectManager
     {
+        private readonly INotificationManager notificationManager;
+
+        public ProjectManager(INotificationManager notificationManager)
+        {
+            this.notificationManager = notificationManager;
+        }
+
         public IEnumerable<Project> GetProjects(User user)
         {
             List<Project> ret = new List<Project>(7);
@@ -60,6 +67,32 @@ namespace StepMap.BusinessLogic
                     ctx.Projects.Remove(project);
                     ctx.SaveChanges();
                 }
+            }
+        }
+
+        private void SentFirstReminder(User user)
+        {
+            //TODO: Config, customize, randomize
+            notificationManager.SendEmail(user, "First reminder", "Your current step ({0}) in project {1} is delayed! Get yourself together!"); //LOCSTR
+        }
+
+        public void CheckProjectProgress(Project project)
+        {
+            using (var ctx = new StepMapDbContext())
+            {
+                Step currentStep = project.FinishedSteps.Last();
+                if (currentStep.Deadline < DateTime.UtcNow)
+                {
+                    project.BadPoint++;
+                    if (currentStep.SentReminder == 0)
+                    {
+                        SentFirstReminder(project.User);
+                        ctx.Projects.Attach(project);
+                        currentStep.SentReminder = 1;
+                    }
+                }
+
+                ctx.SaveChanges();
             }
         }
     }

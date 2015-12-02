@@ -18,6 +18,8 @@ using System.IO;
 using Google.Apis.Util.Store;
 using Google.Apis.Gmail.v1.Data;
 using System.Net.Mail;
+using StepMap.Common;
+using StepMap.Common.Configuration;
 
 namespace StepMap.BusinessLogic
 {
@@ -25,10 +27,13 @@ namespace StepMap.BusinessLogic
     {
         private readonly ILogger logger;
         private readonly GmailService gmailService;
+        private readonly IStepMapConfig config;
 
-        public NotificationManager(ILogger logger)
+        public NotificationManager(ILogger logger, IStepMapConfig config)
         {
             this.logger = logger;
+            this.config = config;
+
             UserCredential credential = CreateCredential();
             gmailService = new GmailService(new BaseClientService.Initializer()
             {
@@ -37,20 +42,24 @@ namespace StepMap.BusinessLogic
             });
 
         }
-        static string[] Scopes = { GmailService.Scope.GmailSend };
-        static string ApplicationName = "stepmap";
+        
+        private static string[] Scopes = { GmailService.Scope.GmailSend };
+        private static string ApplicationName = "stepmap";
 
         private UserCredential CreateCredential()
         {
-            UserCredential credential;
-            using (var stream = new FileStream("client_secret_114882284440-unrvt3i9sbfakciqr3rv2a4cs476321d.apps.googleusercontent.com.json", FileMode.Open, FileAccess.Read))
+            ClientSecrets clientSecrets = new ClientSecrets()
             {
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    GoogleClientSecrets.Load(stream).Secrets,
-                    Scopes,
-                    "stepmap.daemon@gmail.com",
-                    CancellationToken.None).Result;
-            }
+                ClientId =  config.GmailClientId, 
+                ClientSecret = config.GmailApiClientSecret
+            };
+
+            UserCredential credential;
+            credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                clientSecrets,
+                Scopes,
+                config.NotificationAccount,
+                CancellationToken.None).Result;
             return credential;
         }
 
@@ -69,7 +78,7 @@ namespace StepMap.BusinessLogic
             {
                 Subject = subject,
                 Body = text,
-                From = new MailAddress("stepmap.daemon@gmail.com")
+                From = new MailAddress(config.NotificationAccount)
             };
             msg.To.Add(new MailAddress(user.Email));
             msg.ReplyTo.Add(msg.From); // Bounces without this!!

@@ -102,6 +102,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IManagementManager.cs" />
+    <Compile Include="ManagementManager.cs" />
     <Compile Include="NotificationManager.cs" />
     <Compile Include="INotificationManager.cs" />
     <Compile Include="IProjectManager.cs" />

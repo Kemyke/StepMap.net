@@ -40,5 +40,10 @@ namespace StepMap.ServiceContracts
         [DoNotAuthorizeAttribute]
         [WebInvoke(Method = "POST", UriTemplate = "/accounts", BodyStyle=WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         Response Register(string userName, string email, string password);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", UriTemplate = "/checkdeadlines", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        Response CheckDeadlines();
+
     }
 }

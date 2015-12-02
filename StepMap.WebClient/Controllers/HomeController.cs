@@ -29,6 +29,7 @@ namespace StepMap.WebClient.Controllers
             var vm = new UserStepMapViewModel();
             if (resp.ResultCode == ResultCode.OK)
             {
+                vm.UserName = ((CustomPrincipal)WebApiApplication.CurrentUser).Name;
                 vm.Projects = resp.Result;
             }
             else

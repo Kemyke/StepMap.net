@@ -49,6 +49,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -56,12 +57,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ConfigurationCollection.cs" />
+    <Compile Include="Configuration\GenericConfiguration.cs" />
+    <Compile Include="Configuration\GenericStandaloneConfigurationManager.cs" />
+    <Compile Include="Configuration\GenericWebConfigurationManager.cs" />
+    <Compile Include="Configuration\IConfigurationElement.cs" />
+    <Compile Include="Configuration\IConfigurationManager.cs" />
     <Compile Include="DoNotAuthorizeAttribute.cs" />
     <Compile Include="CryptoHelper.cs" />
     <Compile Include="DIContainer\IDIContainer.cs" />
     <Compile Include="DIContainer\LifetimeTypes.cs" />
     <Compile Include="DIContainer\DIContainerFactory.cs" />
     <Compile Include="DIContainer\DIContainerUnity.cs" />
+    <Compile Include="IStepMapConfig.cs" />
     <Compile Include="Logger\Logging.Log4Net\Logger.cs" />
     <Compile Include="Logger\Logging\ILogger.cs" />
     <Compile Include="Logger\Logging\LogEventBase.cs" />
@@ -69,6 +77,7 @@
     <Compile Include="RegexHelpers\IRegexHelper.cs" />
     <Compile Include="RegexHelpers\RegexHelper.cs" />
     <Compile Include="ResultCode.cs" />
+    <Compile Include="StepMapConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

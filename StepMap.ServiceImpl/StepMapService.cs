@@ -14,20 +14,22 @@ using StepMap.Common;
 
 namespace StepMap.ServiceImpl
 {
-    [ServiceBehavior(Namespace = "http://kemy.com", InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple, AddressFilterMode = AddressFilterMode.Any)]
+    [ServiceBehavior(Namespace = "http://stepmap.xyz", InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple, AddressFilterMode = AddressFilterMode.Any)]
     public class StepMapService : IStepMapService
     {
         private readonly ILogger logger;
         private readonly IProjectManager projectManager;
         private readonly IUserManager userManager;
         private readonly IOperationContextProvider operationContextProvider;
+        private readonly IManagementManager managementManager;
 
-        public StepMapService(ILogger logger, IProjectManager projectManager, IUserManager userManager, IOperationContextProvider operationContextProvider)
+        public StepMapService(ILogger logger, IProjectManager projectManager, IManagementManager managementManager, IUserManager userManager, IOperationContextProvider operationContextProvider)
         {
             this.logger = logger;
             this.projectManager = projectManager;
             this.userManager = userManager;
             this.operationContextProvider = operationContextProvider;
+            this.managementManager = managementManager;
 
             logger.Info("{0} created!", this.GetType().Name);
         }
@@ -91,6 +93,14 @@ namespace StepMap.ServiceImpl
                 {
                     userManager.Register(userName, email, password);
                 });
+        }
+
+        public Response CheckDeadlines()
+        {
+            return WrapResponse(() =>
+            {
+                managementManager.CheckAllProjectsProgress();
+            });
         }
 
         private Response<T> WrapResponse<T>(Func<T> a)

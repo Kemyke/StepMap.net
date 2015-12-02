@@ -13,5 +13,6 @@ namespace StepMap.BusinessLogic
         void AddProject(Project project);
         void UpdateProject(Project project);
         void DeleteProject(int projectId);
+        void CheckProjectProgress(Project project);
     }
 }
