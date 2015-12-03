@@ -100,5 +100,41 @@ namespace StepMap.UnitTests.DAL
                 }
             }
         }
+
+        [TestMethod]
+        public void DALTest3()
+        {
+            using (StepMapDbContext ctx = new StepMapDbContext())
+            {
+                User u = new User();
+                u.Email = "test@test.com";
+                u.LastLogin = DateTime.UtcNow;
+                u.Name = "test user";
+                u.PasswordHash = "hash";
+                u.UserRole = UserRole.Member;
+                u.UserState = UserState.Active;
+
+                u = ctx.Users.Add(u);
+                ctx.SaveChanges();
+
+                UserConfirmation uc = new UserConfirmation();
+                uc.User = u;
+                uc.ConfirmationGuid = "guid";
+                uc = ctx.UserConfirmations.Add(uc);
+                ctx.SaveChanges();
+
+                try
+                {
+                    UserConfirmation du = ctx.UserConfirmations.Single(tu => tu.ConfirmationGuid == "guid");
+                    Assert.AreEqual(u.Id, du.User.Id);
+                }
+                finally
+                {
+                    ctx.UserConfirmations.Remove(uc);
+                    ctx.Users.Remove(u);
+                    ctx.SaveChanges();
+                }
+            }
+        }
     }
 }

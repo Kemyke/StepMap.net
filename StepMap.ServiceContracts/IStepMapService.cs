@@ -45,5 +45,9 @@ namespace StepMap.ServiceContracts
         [WebInvoke(Method = "GET", UriTemplate = "/checkdeadlines", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         Response CheckDeadlines();
 
+        [OperationContract]
+        [WebInvoke(Method = "GET", UriTemplate = "/confirmation/{guid}", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        [DoNotAuthorizeAttribute]
+        Response<User> ConfirmEmail(string guid);
     }
 }

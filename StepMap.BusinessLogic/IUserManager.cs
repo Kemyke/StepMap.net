@@ -13,5 +13,6 @@ namespace StepMap.BusinessLogic
         User GetUser(string userName);
         void Register(string userName, string email, string pwdHash);
         void Login(User user);
+        User ConfirmEmail(string guid);
     }
 }

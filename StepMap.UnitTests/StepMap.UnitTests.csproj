@@ -119,6 +119,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BusinessLogic\NotificationManagerTests.cs" />
+    <Compile Include="BusinessLogic\UserManagerTest.cs" />
     <Compile Include="Common\RegexHelperTest.cs" />
     <Compile Include="DAL\DALTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

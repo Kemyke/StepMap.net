@@ -16,6 +16,8 @@ namespace StepMap.Common
         INVALID_EMAILADDRESS = 1,
         [EnumMember]
         UNKOWN_USER = 2,
+        [EnumMember]
+        CONFIRMATION_GUID_NOT_VALID = 3,
 
         [EnumMember]
         UNKOWN_ERROR = 900,

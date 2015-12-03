@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.ServiceModel;
 using StepMap.Logger.Logging;
 using StepMap.Common;
+using StepMap.Common.Exceptions;
 
 namespace StepMap.ServiceImpl
 {
@@ -103,13 +104,27 @@ namespace StepMap.ServiceImpl
             });
         }
 
-        private Response<T> WrapResponse<T>(Func<T> a)
+        public Response<dto.User> ConfirmEmail(string guid)
+        {
+            return WrapResponse(() =>
+            {
+                dal.User ret = userManager.ConfirmEmail(guid);
+                return UserConverter.ConvertUser(ret);
+            });
+        }
+
+        private Response<T> WrapResponse<T>(Func<T> method)
         {
             ResultCode rc = ResultCode.OK;
             T ret = default(T);
             try
             {
-                ret = a();
+                ret = method();
+            }
+            catch(ConfirmationGuidNotValidException ex)
+            {
+                logger.Error(ex.ToString());
+                rc = ResultCode.CONFIRMATION_GUID_NOT_VALID;
             }
             catch (Exception ex)
             {
@@ -119,19 +134,10 @@ namespace StepMap.ServiceImpl
             return new Response<T>(rc, ret);
         }
 
-        private Response WrapResponse(Action a)
+        private Response WrapResponse(Action method)
         {
-            ResultCode rc = ResultCode.OK;
-            try
-            {
-                a();
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex.ToString());
-                rc = ResultCode.UNKOWN_ERROR;
-            }
-            return new Response(rc);
+            var ret = WrapResponse<object>(() => { method(); return null; });
+            return new Response(ret.ResultCode);
         }
     }
 }

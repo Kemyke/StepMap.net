@@ -18,6 +18,7 @@ namespace StepMap.DAL
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Step> Steps { get; set; }
         public virtual DbSet<Reminder> Reminders { get; set; }
+        public virtual DbSet<UserConfirmation> UserConfirmations { get; set; }
 
         public StepMapDbContext()
             : base("name = StepMapDbContext")
@@ -40,8 +41,10 @@ namespace StepMap.DAL
                     .HasMany(e => e.SentReminders)
                     .WithRequired(e => e.Step)
                     .HasForeignKey(e => e.StepId);
-            
+
             modelBuilder.Entity<Reminder>().ToTable("Reminder");
+            
+            modelBuilder.Entity<UserConfirmation>().ToTable("UserConfirmation");
             
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<User>()

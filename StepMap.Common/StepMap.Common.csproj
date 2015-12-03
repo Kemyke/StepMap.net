@@ -69,6 +69,7 @@
     <Compile Include="DIContainer\LifetimeTypes.cs" />
     <Compile Include="DIContainer\DIContainerFactory.cs" />
     <Compile Include="DIContainer\DIContainerUnity.cs" />
+    <Compile Include="Exceptions\ConfirmationGuidNotValidException.cs" />
     <Compile Include="IStepMapConfig.cs" />
     <Compile Include="Logger\Logging.Log4Net\Logger.cs" />
     <Compile Include="Logger\Logging\ILogger.cs" />

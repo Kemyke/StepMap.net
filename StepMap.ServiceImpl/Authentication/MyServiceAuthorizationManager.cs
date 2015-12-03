@@ -18,6 +18,14 @@ namespace StepMap.ServiceImpl
 {
     public class MyServiceAuthorizationManager : ServiceAuthorizationManager
     {
+        private class MockNotif : INotificationManager
+        {
+            public void SendEmail(DAL.User user, string subject, string text)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         private ILogger logger;
         private IUserManager userManager;
 
@@ -31,8 +39,8 @@ namespace StepMap.ServiceImpl
 
             var regexHelper = diContainer.GetInstance<IRegexHelper>();
             logger = diContainer.GetInstance<ILogger>();
-            userManager = diContainer.GetInstance<IUserManager>();
-            userManager = new UserManager(logger, regexHelper);
+            //userManager = diContainer.GetInstance<IUserManager>();
+            userManager = new UserManager(logger, regexHelper, new MockNotif());
         }
 
         protected override bool CheckAccessCore(OperationContext operationContext)
