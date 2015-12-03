@@ -12,9 +12,9 @@ namespace StepMap.DAL
         public string Name { get; set; }
         public DateTime Deadline { get; set; }
         public DateTime? FinishDate { get; set; }
-        public int SentReminder { get; set; }
         public int ProjectId { get; set; }
 
         public virtual Project Project { get; set; }
+        public virtual ICollection<Reminder> SentReminders { get; set; }
     }
 }

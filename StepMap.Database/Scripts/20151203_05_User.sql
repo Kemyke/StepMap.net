@@ -1,0 +1,124 @@
+﻿/* To prevent any potential data loss issues, you should review this script in detail before running it outside the context of the database designer.*/
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE stepmap.UserState SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE stepmap.UserRole SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE stepmap.Tmp_User
+	(
+	Id int NOT NULL IDENTITY (1, 1),
+	Name nvarchar(MAX) NOT NULL,
+	Email nvarchar(MAX) NOT NULL,
+	PasswordHash nvarchar(MAX) NOT NULL,
+	LastLogin datetime2(7) NOT NULL,
+	UserStateId int NOT NULL,
+	UserRoleId int NOT NULL
+	)  ON [PRIMARY]
+	 TEXTIMAGE_ON [PRIMARY]
+GO
+ALTER TABLE stepmap.Tmp_User ADD CONSTRAINT
+	DF_User_UserStateId DEFAULT 2 FOR UserStateId
+ALTER TABLE stepmap.Tmp_User ADD CONSTRAINT
+	DF_User_UserRoleId DEFAULT 1 FOR UserRoleId
+ALTER TABLE stepmap.Tmp_User SET (LOCK_ESCALATION = TABLE)
+GO
+SET IDENTITY_INSERT stepmap.Tmp_User ON
+GO
+IF EXISTS(SELECT * FROM stepmap.[User])
+	 EXEC('INSERT INTO stepmap.Tmp_User (Id, Name, Email, PasswordHash, LastLogin)
+		SELECT Id, Name, Email, PasswordHash, LastLogin FROM stepmap.[User] WITH (HOLDLOCK TABLOCKX)')
+GO
+SET IDENTITY_INSERT stepmap.Tmp_User OFF
+GO
+ALTER TABLE stepmap.Project
+	DROP CONSTRAINT FK_User_Project
+GO
+DROP TABLE stepmap.[User]
+GO
+EXECUTE sp_rename N'stepmap.Tmp_User', N'User', 'OBJECT' 
+GO
+ALTER TABLE stepmap.[User] ADD CONSTRAINT
+	PK_User PRIMARY KEY CLUSTERED 
+	(
+	Id
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE stepmap.[User] ADD CONSTRAINT
+	FK_User_UserRole FOREIGN KEY
+	(
+	UserRoleId
+	) REFERENCES stepmap.UserRole
+	(
+	Id
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE stepmap.[User] ADD CONSTRAINT
+	FK_User_UserState FOREIGN KEY
+	(
+	UserStateId
+	) REFERENCES stepmap.UserState
+	(
+	Id
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE stepmap.Project ADD CONSTRAINT
+	FK_User_Project FOREIGN KEY
+	(
+	UserId
+	) REFERENCES stepmap.[User]
+	(
+	Id
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE stepmap.Project SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+
+
+/* To prevent any potential data loss issues, you should review this script in detail before running it outside the context of the database designer.*/
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE stepmap.[User]
+	DROP CONSTRAINT DF_User_UserStateId
+GO
+ALTER TABLE stepmap.[User]
+	DROP CONSTRAINT DF_User_UserRoleId
+GO
+ALTER TABLE stepmap.[User] SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT

@@ -62,13 +62,14 @@ namespace StepMap.UnitTests.BusinessLogic
         #endregion
 
         [TestMethod]
+        [Ignore]
         public void TestMethod1()
         {
             var logger = new Mock<ILogger>();
             var config = new Mock<IStepMapConfig>();
             config.Setup(x => x.NotificationAccount).Returns("stepmap.daemon@gmail.com");
-            config.Setup(x => x.GmailClientId).Returns("114882284440-unrvt3i9sbfakciqr3rv2a4cs476321d.apps.googleusercontent.com");
-            config.Setup(x => x.GmailApiClientSecret).Returns("9k2HT_qw1qlMRrNjjcnNDdJ-");
+            config.Setup(x => x.GmailClientId).Returns("");
+            config.Setup(x => x.GmailApiClientSecret).Returns("");
 
             NotificationManager nm = new NotificationManager(logger.Object, config.Object);
             User user = new User{ Email = "kemyyy@gmail.com", Name = "kemy" };

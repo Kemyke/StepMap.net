@@ -59,6 +59,11 @@
   <ItemGroup>
     <Content Include="Scripts\20151109_02_Project.sql" />
     <Content Include="Scripts\20151109_03_Step.sql" />
+    <Content Include="Scripts\20151203_02_UserRole.sql" />
+    <Content Include="Scripts\20151203_05_User.sql" />
+    <Content Include="Scripts\20151203_04_User.sql" />
+    <Content Include="Scripts\20151203_03_Reminder.sql" />
+    <Content Include="Scripts\20151203_01_UserState.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

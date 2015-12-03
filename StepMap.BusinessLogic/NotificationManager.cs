@@ -26,7 +26,7 @@ namespace StepMap.BusinessLogic
     public class NotificationManager : INotificationManager
     {
         private readonly ILogger logger;
-        private readonly GmailService gmailService;
+        private readonly Lazy<GmailService> gmailService;
         private readonly IStepMapConfig config;
 
         public NotificationManager(ILogger logger, IStepMapConfig config)
@@ -34,15 +34,17 @@ namespace StepMap.BusinessLogic
             this.logger = logger;
             this.config = config;
 
-            UserCredential credential = CreateCredential();
-            gmailService = new GmailService(new BaseClientService.Initializer()
+            gmailService = new Lazy<GmailService>(() => 
             {
-                HttpClientInitializer = credential,
-                ApplicationName = ApplicationName,
+                UserCredential credential = CreateCredential();
+                return new GmailService(new BaseClientService.Initializer()
+                {
+                    HttpClientInitializer = credential,
+                    ApplicationName = ApplicationName,
+                });
             });
-
         }
-        
+
         private static string[] Scopes = { GmailService.Scope.GmailSend };
         private static string ApplicationName = "stepmap";
 
@@ -86,7 +88,7 @@ namespace StepMap.BusinessLogic
             msg.Save(msgStr);
 
             var m = new Message { Raw = Base64UrlEncode(msgStr.ToString()) };
-            gmailService.Users.Messages.Send(m, "me").Execute();
+            gmailService.Value.Users.Messages.Send(m, "me").Execute();
         }
     }
 }

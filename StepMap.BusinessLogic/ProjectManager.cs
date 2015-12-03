@@ -84,12 +84,10 @@ namespace StepMap.BusinessLogic
                 if (currentStep.Deadline < DateTime.UtcNow)
                 {
                     project.BadPoint++;
-                    if (currentStep.SentReminder == 0)
+                    if (!currentStep.SentReminders.Any())
                     {
                         SentFirstReminder(project.User);
                         ctx.Projects.Attach(project);
-                        //TODO: Store full reminders not just an integer
-                        currentStep.SentReminder = 1;
                     }
                 }
 

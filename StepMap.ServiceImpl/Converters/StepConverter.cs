@@ -18,7 +18,6 @@ namespace StepMap.ServiceImpl.Converters
             ret.Deadline = step.Deadline;
             ret.FinishDate = step.FinishDate;
             ret.Name = step.Name;
-            ret.SentReminder = step.SentReminder;
             return ret;
         }
 
@@ -30,7 +29,6 @@ namespace StepMap.ServiceImpl.Converters
             ret.Deadline = step.Deadline;
             ret.FinishDate = step.FinishDate;
             ret.Name = step.Name;
-            ret.SentReminder = step.SentReminder;
             return ret;
         }
 

@@ -16,6 +16,7 @@ namespace StepMap.DAL
         public int BadPoint { get; set; }
         public int UserId { get; set; }
 
+        //TODO: rename
         public virtual ICollection<Step> FinishedSteps { get; set; }
         public virtual User User { get; set; }
     }
