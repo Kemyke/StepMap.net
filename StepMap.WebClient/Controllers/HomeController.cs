@@ -60,7 +60,7 @@ namespace StepMap.WebClient.Controllers
         {
             var c = CreateClient();
             var x = c.DownloadString(Address);
-            var z = System.Web.Helpers.Json.Decode<List<Project>>(x);
+            var z = System.Web.Helpers.Json.Decode<Response<IList<Project>>>(x).Result;
             var p = z.Single(tp => tp != null && tp.Id == projectId);
 
             var client = CreateClient();
@@ -87,7 +87,7 @@ namespace StepMap.WebClient.Controllers
         {
             var c = CreateClient();
             var x = c.DownloadString(Address);
-            var z = System.Web.Helpers.Json.Decode<List<Project>>(x);
+            var z = System.Web.Helpers.Json.Decode<Response<IList<Project>>>(x).Result;
             var p = z.Single(tp => tp != null && tp.Id == projectId);
 
             var client = CreateClient();

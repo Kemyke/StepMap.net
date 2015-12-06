@@ -33,6 +33,7 @@ namespace StepMap.ServiceContracts
         Response DeleteProject(int projectId);
 
         [OperationContract]
+        [DoNotAuthorizeAttribute]
         [WebInvoke(Method = "GET", UriTemplate = "/accounts", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         Response<User> Login();
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using StepMap.BusinessLogic;
+using StepMap.Common;
 using StepMap.Common.RegexHelpers;
 using StepMap.DAL;
 using StepMap.Logger.Logging;
@@ -19,10 +20,11 @@ namespace StepMap.UnitTests.BusinessLogic
         public void UserManagerTest1()
         {
             Mock<ILogger> logger = new Mock<ILogger>();
+            Mock<IStepMapConfig> config = new Mock<IStepMapConfig>();
             Mock<IRegexHelper> regexHelper = new Mock<IRegexHelper>();
             Mock<INotificationManager> notificationManager = new Mock<INotificationManager>();
             regexHelper.Setup(r => r.IsValidEmail(It.IsAny<string>())).Returns(true);
-            UserManager um = new UserManager(logger.Object, regexHelper.Object, notificationManager.Object);
+            UserManager um = new UserManager(logger.Object, config.Object, regexHelper.Object, notificationManager.Object);
             um.Register("test user", "test@test.com", "hash");
 
             using (var ctx = new StepMapDbContext())

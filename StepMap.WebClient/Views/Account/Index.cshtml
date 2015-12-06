@@ -1,4 +1,15 @@
-﻿<div id="login-body">
+﻿@using StepMap.WebClient.ViewModels
+@using StepMap.ServiceContracts.DTO
+@model LoginViewModel
+
+@if (Model != null && !string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div>
+        @Model.ErrorMessage
+    </div>
+}
+
+<div id="login-body">
     <div id="login-box">
         <img id="login-logo" src="@Url.Content("~/Content/Images/login_logo_img.png")" width="204" height="29" alt="Stepmap logo" title="Stepmap logo" />
         @using (Html.BeginForm("Login", "Account", new { }, FormMethod.Post, null))

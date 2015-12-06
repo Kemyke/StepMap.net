@@ -11,5 +11,6 @@ namespace StepMap.Common
         string NotificationAccount { get; }
         string GmailClientId { get; }
         string GmailApiClientSecret { get; }
+        string ClientBaseAddress { get; }
     }
 }

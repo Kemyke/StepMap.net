@@ -26,6 +26,30 @@ namespace StepMap.ServiceImpl
             }
         }
 
+        private class Config : IStepMapConfig
+        {
+            public string NotificationAccount
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public string GmailClientId
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public string GmailApiClientSecret
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public string ClientBaseAddress
+            {
+                get { throw new NotImplementedException(); }
+            }
+        }
+
+
         private ILogger logger;
         private IUserManager userManager;
 
@@ -40,7 +64,7 @@ namespace StepMap.ServiceImpl
             var regexHelper = diContainer.GetInstance<IRegexHelper>();
             logger = diContainer.GetInstance<ILogger>();
             //userManager = diContainer.GetInstance<IUserManager>();
-            userManager = new UserManager(logger, regexHelper, new MockNotif());
+            userManager = new UserManager(logger, new Config(), regexHelper, new MockNotif());
         }
 
         protected override bool CheckAccessCore(OperationContext operationContext)

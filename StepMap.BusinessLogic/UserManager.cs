@@ -1,4 +1,5 @@
-﻿using StepMap.Common.Exceptions;
+﻿using StepMap.Common;
+using StepMap.Common.Exceptions;
 using StepMap.Common.RegexHelpers;
 using StepMap.DAL;
 using StepMap.Logger.Logging;
@@ -15,12 +16,14 @@ namespace StepMap.BusinessLogic
         private readonly ILogger logger;
         private readonly IRegexHelper regexHelper;
         private readonly INotificationManager notificationManager;
+        private readonly IStepMapConfig config;
 
-        public UserManager(ILogger logger, IRegexHelper regexHelper, INotificationManager notificationManager)
+        public UserManager(ILogger logger, IStepMapConfig config, IRegexHelper regexHelper, INotificationManager notificationManager)
         {
             this.logger = logger;
             this.regexHelper = regexHelper;
             this.notificationManager = notificationManager;
+            this.config = config;
         }
 
         public bool IsPasswordValid(string userName, string pwdHash)
@@ -52,6 +55,7 @@ namespace StepMap.BusinessLogic
         {
             using (var ctx = new StepMapDbContext())
             {
+                user = ctx.Users.Attach(user);
                 UserConfirmation uc = new UserConfirmation();
                 uc.User = user;
                 uc.ConfirmationGuid = Guid.NewGuid().ToString();
@@ -59,7 +63,7 @@ namespace StepMap.BusinessLogic
                 ctx.UserConfirmations.Add(uc);
                 ctx.SaveChanges();
                 
-                string link = "http://www.stepmap.xyz/Account/ConfirmEmail/?guid=" + uc.ConfirmationGuid;
+                string link = config.ClientBaseAddress + "/Account/ConfirmEmail/?guid=" + uc.ConfirmationGuid;
                 //TODO: do not hardcode text
                 notificationManager.SendEmail(user, "registration on stepmap.xyz", string.Format("you are registered on stepmap.xyz. please confirm your accout visiting this link: {0}!", link)); //LOCSTR
             }
@@ -72,11 +76,28 @@ namespace StepMap.BusinessLogic
             {
                 using (var ctx = new StepMapDbContext())
                 {
-                    User user = new User() { Name = userName, Email = email, PasswordHash = pwdHash, UserRole = UserRole.Member, UserState = UserState.NotActivatedYet };
-                    ctx.Users.Add(user);
-                    ctx.SaveChanges();
+                    User oldUser = ctx.Users.SingleOrDefault(u => u.Name == userName);
+                    if (oldUser == null)
+                    {
+                        User oldEmail = ctx.Users.SingleOrDefault(u => u.Email == email);
 
-                    SendConfirmationEmail(user);
+                        if (oldEmail == null)
+                        {
+                            User user = new User() { Name = userName, Email = email, PasswordHash = pwdHash, UserRole = UserRole.Member, UserState = UserState.NotActivatedYet };
+                            user = ctx.Users.Add(user);
+                            ctx.SaveChanges();
+
+                            SendConfirmationEmail(user);
+                        }
+                        else
+                        {
+                            throw new UserAlreadyExistException(string.Format("Email already exist! {0}", email));
+                        }
+                    }
+                    else
+                    {
+                        throw new UserAlreadyExistException(string.Format("User name already exist! {0}", userName));
+                    }
                 }
             }
             else
@@ -85,14 +106,21 @@ namespace StepMap.BusinessLogic
             }
         }
 
-        //TODO: add user state and role
         public void Login(User user)
         {
             using (var ctx = new StepMapDbContext())
             {
                 user = ctx.Users.Attach(user);
-                user.LastLogin = DateTime.UtcNow;
-                ctx.SaveChanges();
+
+                if (user.UserState == UserState.Active)
+                {
+                    user.LastLogin = DateTime.UtcNow;
+                    ctx.SaveChanges();
+                }
+                else
+                {
+                    throw new AccountIsNotActivatedException("Please confirm your email: " + user.Email);
+                }
             }
         }
 

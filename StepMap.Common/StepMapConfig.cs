@@ -29,5 +29,12 @@ namespace StepMap.Common
             get { return (string)this["NotificationAccount"]; }
             set { this["NotificationAccount"] = value; }
         }
+
+        [ConfigurationProperty("ClientBaseAddress", IsRequired = true)]
+        public string ClientBaseAddress
+        {
+            get { return (string)this["ClientBaseAddress"]; }
+            set { this["ClientBaseAddress"] = value; }
+        }
     }
 }

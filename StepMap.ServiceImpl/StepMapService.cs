@@ -44,7 +44,8 @@ namespace StepMap.ServiceImpl
                 dal.User currentUser = operationContextProvider.CurrentUser;
                 IEnumerable<dal.Project> projects = projectManager.GetProjects(currentUser);
 
-                return projects.Select(p => p == null ? null : ProjectConverter.ConvertProject(p)).ToList();
+                var ret = projects.Select(p => p == null ? null : ProjectConverter.ConvertProject(p)).ToList();
+                return ret;
             });
         }
 
@@ -120,6 +121,16 @@ namespace StepMap.ServiceImpl
             try
             {
                 ret = method();
+            }
+            catch(UserAlreadyExistException ex)
+            {
+                logger.Error(ex.ToString());
+                rc = ResultCode.USER_ALREADY_EXISTS;
+            }
+            catch (AccountIsNotActivatedException ex)
+            {
+                logger.Error(ex.ToString());
+                rc = ResultCode.ACCOUNT_IS_NOT_CONFIRMED;
             }
             catch(ConfirmationGuidNotValidException ex)
             {

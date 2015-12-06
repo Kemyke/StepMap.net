@@ -68,7 +68,7 @@ namespace StepMap.WebClient.Controllers
             else
             {
                 //TODO: Error handling
-                return View("Index");
+                return View("Index", new LoginViewModel() { ErrorMessage = string.Format("Error: {0}.", resp.ResultCode.ToString()) });
             }
         }
 

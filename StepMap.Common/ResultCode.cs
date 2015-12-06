@@ -18,6 +18,10 @@ namespace StepMap.Common
         UNKOWN_USER = 2,
         [EnumMember]
         CONFIRMATION_GUID_NOT_VALID = 3,
+        [EnumMember]
+        ACCOUNT_IS_NOT_CONFIRMED = 4,
+        [EnumMember]
+        USER_ALREADY_EXISTS = 5,
 
         [EnumMember]
         UNKOWN_ERROR = 900,
