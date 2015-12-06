@@ -36,5 +36,11 @@ namespace StepMap.Common
             get { return (string)this["ClientBaseAddress"]; }
             set { this["ClientBaseAddress"] = value; }
         }
+
+        public string AppPath
+        {
+            get;
+            set;
+        }
     }
 }

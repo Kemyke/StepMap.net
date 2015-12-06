@@ -61,7 +61,8 @@ namespace StepMap.BusinessLogic
                 clientSecrets,
                 Scopes,
                 config.NotificationAccount,
-                CancellationToken.None).Result;
+                CancellationToken.None,
+                new FileDataStore(config.AppPath + "MyStorage")).Result;
             return credential;
         }
 

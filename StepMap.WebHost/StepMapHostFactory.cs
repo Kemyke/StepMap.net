@@ -17,6 +17,8 @@ namespace StepMap.WebHost
 
             var cm = container.GetInstance<IConfigurationManager<IStepMapConfig>>();
             cm.LoadConfiguation();
+            //TODO: hack
+            ((StepMapConfig)cm.Config).AppPath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
             container.RegisterInstance(cm.Config);
         }
     }

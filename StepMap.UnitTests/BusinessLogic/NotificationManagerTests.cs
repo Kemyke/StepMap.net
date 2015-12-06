@@ -62,7 +62,7 @@ namespace StepMap.UnitTests.BusinessLogic
         #endregion
 
         [TestMethod]
-        [Ignore]
+        //[Ignore]
         public void TestMethod1()
         {
             var logger = new Mock<ILogger>();

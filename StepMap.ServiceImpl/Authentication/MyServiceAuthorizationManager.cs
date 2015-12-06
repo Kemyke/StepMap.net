@@ -47,6 +47,11 @@ namespace StepMap.ServiceImpl
             {
                 get { throw new NotImplementedException(); }
             }
+
+            public string AppPath
+            {
+                get { throw new NotImplementedException(); }
+            }
         }
 
 

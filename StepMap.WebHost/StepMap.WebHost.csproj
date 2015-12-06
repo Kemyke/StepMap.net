@@ -212,6 +212,7 @@
     <Content Include="Configs\DbConnectionsRelease.config" />
     <Content Include="Configs\StepMapConfig.config" />
     <Content Include="Configs\StepMapConfigRelease.config" />
+    <Content Include="MyStorage\Google.Apis.Auth.OAuth2.Responses.TokenResponse-stepmap.daemon%40gmail.com" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
