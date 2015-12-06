@@ -54,6 +54,8 @@ namespace StepMap.ServiceImpl
         {
             return WrapResponse(() =>
             {
+                logger.Debug("AddProject called");
+
                 dal.Project dalProj = ProjectConverter.ConvertProject(project);
                 dalProj.UserId = operationContextProvider.CurrentUser.Id;
                 projectManager.AddProject(dalProj);
@@ -65,6 +67,7 @@ namespace StepMap.ServiceImpl
         {
             return WrapResponse(() =>
             {
+                logger.Debug("UpdateProject called");
                 dal.Project dalProj = ProjectConverter.ConvertProject(project);
                 projectManager.UpdateProject(dalProj);
             });
@@ -74,6 +77,7 @@ namespace StepMap.ServiceImpl
         {
             return WrapResponse(() =>
             {
+                logger.Debug("DeleteProject called");
                 projectManager.DeleteProject(projectId);
             });
         }
@@ -83,6 +87,7 @@ namespace StepMap.ServiceImpl
         {
             return WrapResponse(() =>
                 {
+                    logger.Debug("Login called");
                     dto.User ret;
                     dal.User dalUser = operationContextProvider.CurrentUser;
                     userManager.Login(dalUser);
@@ -95,6 +100,7 @@ namespace StepMap.ServiceImpl
         {
             return WrapResponse(() =>
                 {
+                    logger.Debug("Register called");
                     userManager.Register(userName, email, password);
                 });
         }
@@ -103,6 +109,7 @@ namespace StepMap.ServiceImpl
         {
             return WrapResponse(() =>
             {
+                logger.Debug("CheckDeadlines called");
                 managementManager.CheckAllProjectsProgress();
             });
         }
@@ -111,6 +118,7 @@ namespace StepMap.ServiceImpl
         {
             return WrapResponse(() =>
             {
+                logger.Debug("ConfirmEmail called");
                 dal.User ret = userManager.ConfirmEmail(guid);
                 return UserConverter.ConvertUser(ret);
             });

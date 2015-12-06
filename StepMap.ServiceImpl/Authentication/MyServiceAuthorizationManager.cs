@@ -104,15 +104,18 @@ namespace StepMap.ServiceImpl
                     bool success = userManager.IsPasswordValid(userName, password);
                     if (!success)
                     {
+                        logger.Error("Invalid password: {0}, {1}", userManager, password);
                         throw new WebFaultException(HttpStatusCode.Unauthorized);
                     }
                     else
                     {
+                        logger.Debug("Succesfully authenticated: {0}", authHeader);
                         return success;
                     }
                 }
                 else
                 {
+                    logger.Error("Auth header is empty!");
                     throw new WebFaultException(HttpStatusCode.Unauthorized);
                 }
             }

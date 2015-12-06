@@ -1,4 +1,5 @@
 ﻿using StepMap.Common;
+using StepMap.Logger.Logging;
 using StepMap.ServiceContracts;
 using StepMap.ServiceContracts.DTO;
 using StepMap.WebClient.ViewModels;
@@ -19,10 +20,18 @@ namespace StepMap.WebClient.Controllers
         private static string ApiAddress = ConfigurationManager.AppSettings["ApiAddress"];
         private static string Resource = "/projects";
         private static string Address = ApiAddress + Resource;
+        private readonly ILogger logger;
+
+        public HomeController()
+        {
+            logger = new Logger.Logging.Log4Net.Logger();
+            logger.Debug("HomeController initialized!");
+        }
 
         private UserStepMapViewModel GetProjects()
         {
             var client = CreateClient();
+            logger.Debug("HttpRequestHeader.Authorization: {0}", client.Headers[HttpRequestHeader.Authorization]);
             var json = client.DownloadString(Address);
             var resp = System.Web.Helpers.Json.Decode<Response<IList<Project>>>(json);
 
@@ -75,40 +84,59 @@ namespace StepMap.WebClient.Controllers
 
         public ActionResult CloseProject(int projectId)
         {
-            var client = CreateClient();
-            string json = System.Web.Helpers.Json.Encode(projectId);
+            try
+            {
+                var client = CreateClient();
+                logger.Debug("HttpRequestHeader.Authorization: {0}", client.Headers[HttpRequestHeader.Authorization]);
+                string json = System.Web.Helpers.Json.Encode(projectId);
 
-            //TODO: error handling
-            client.UploadString(Address, "DELETE", json);
-            return View("Index", GetProjects());
+                //TODO: error handling
+                client.UploadString(Address, "DELETE", json);
+                return View("Index", GetProjects());
+            }
+            catch(Exception ex)
+            {
+                logger.Error(ex.ToString());
+                return View("Error");
+            }
         }
 
         public ActionResult CloseStep(int projectId)
         {
-            var c = CreateClient();
-            var x = c.DownloadString(Address);
-            var z = System.Web.Helpers.Json.Decode<Response<IList<Project>>>(x).Result;
-            var p = z.Single(tp => tp != null && tp.Id == projectId);
+            try
+            {
+                var c = CreateClient();
+                logger.Debug("HttpRequestHeader.Authorization: {0}", c.Headers[HttpRequestHeader.Authorization]);
+                var x = c.DownloadString(Address);
+                var z = System.Web.Helpers.Json.Decode<Response<IList<Project>>>(x).Result;
+                var p = z.Single(tp => tp != null && tp.Id == projectId);
 
-            var client = CreateClient();
-            p.FinishedSteps.Last().FinishDate = DateTime.Now;
-            p.FinishedSteps.Add(new Step()
-                {
-                    ProjectId = p.Id,
-                    Name = "Next step",
-                    Deadline = DateTime.Now,
-                });
+                var client = CreateClient();
+                p.FinishedSteps.Last().FinishDate = DateTime.Now;
+                p.FinishedSteps.Add(new Step()
+                    {
+                        ProjectId = p.Id,
+                        Name = "Next step",
+                        Deadline = DateTime.Now,
+                    });
 
-            string json = System.Web.Helpers.Json.Encode(p);
+                string json = System.Web.Helpers.Json.Encode(p);
 
-            //TODO: error handling
-            client.UploadString(Address, "PUT", json);
-            return View("Index", GetProjects());
+                //TODO: error handling
+                client.UploadString(Address, "PUT", json);
+                return View("Index", GetProjects());
+            }
+            catch(Exception ex)
+            {
+                logger.Error(ex.ToString());
+                return View("Error");
+            }
         }
 
         public ActionResult CreateProject(int position)
         {
             var client = CreateClient();
+            logger.Debug("HttpRequestHeader.Authorization: {0}", client.Headers[HttpRequestHeader.Authorization]);
 
             Project p = new Project()
             {
