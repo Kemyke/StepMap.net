@@ -57,12 +57,13 @@ namespace StepMap.BusinessLogic
             };
 
             UserCredential credential;
+
             credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                 clientSecrets,
                 Scopes,
                 config.NotificationAccount,
                 CancellationToken.None,
-                new FileDataStore(config.AppPath + "MyStorage")).Result;
+                new EFDataStore()).Result;
             return credential;
         }
 

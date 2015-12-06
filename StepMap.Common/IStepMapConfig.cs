@@ -12,6 +12,5 @@ namespace StepMap.Common
         string GmailClientId { get; }
         string GmailApiClientSecret { get; }
         string ClientBaseAddress { get; }
-        string AppPath { get; }
     }
 }

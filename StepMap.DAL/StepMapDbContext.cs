@@ -19,6 +19,7 @@ namespace StepMap.DAL
         public virtual DbSet<Step> Steps { get; set; }
         public virtual DbSet<Reminder> Reminders { get; set; }
         public virtual DbSet<UserConfirmation> UserConfirmations { get; set; }
+        public virtual DbSet<DataStore> DataStores { get; set; }
 
         public StepMapDbContext()
             : base("name = StepMapDbContext")
@@ -29,6 +30,8 @@ namespace StepMap.DAL
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("stepmap");
+
+            modelBuilder.Entity<DataStore>().ToTable("DataStore");
 
             modelBuilder.Entity<Project>().ToTable("Project");
             modelBuilder.Entity<Project>()
