@@ -84,7 +84,9 @@ namespace StepMap.ServiceImpl
             return WrapResponse(() =>
                 {
                     dto.User ret;
-                    ret = UserConverter.ConvertUser(operationContextProvider.CurrentUser);
+                    dal.User dalUser = operationContextProvider.CurrentUser;
+                    userManager.Login(dalUser);
+                    ret = UserConverter.ConvertUser(dalUser);
                     return ret;
                 });
         }
