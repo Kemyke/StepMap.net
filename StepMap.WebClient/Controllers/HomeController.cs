@@ -12,6 +12,7 @@ using System.Text;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace StepMap.WebClient.Controllers
 {
@@ -69,8 +70,21 @@ namespace StepMap.WebClient.Controllers
         public ActionResult Index()
         {
             ViewBag.Title = "Stepmap";
-            var vm = GetProjects();
-            return View(vm);
+            try
+            {
+                var vm = GetProjects();
+                return View(vm);
+            }
+            catch(WebException ex)
+            {
+                var resp = ex.Response as HttpWebResponse;
+                if(resp.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    Response.Cookies.Remove(FormsAuthentication.FormsCookieName);
+                    return RedirectToAction("Index", "Account");
+                }
+                throw;
+            }
         }
 
         public ActionResult SetProjectName(int projectId, string name)

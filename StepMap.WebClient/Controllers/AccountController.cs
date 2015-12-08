@@ -107,7 +107,7 @@ namespace StepMap.WebClient.Controllers
 
         public ActionResult Logout()
         {
-            System.Web.HttpContext.Current.User = null;
+            Response.Cookies.Remove(FormsAuthentication.FormsCookieName);
             return View("Index");
         }
 
