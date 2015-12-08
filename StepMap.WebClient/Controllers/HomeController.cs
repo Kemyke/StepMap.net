@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 
 namespace StepMap.WebClient.Controllers
@@ -38,7 +39,7 @@ namespace StepMap.WebClient.Controllers
             var vm = new UserStepMapViewModel();
             if (resp.ResultCode == ResultCode.OK)
             {
-                vm.UserName = ((CustomPrincipal)WebApiApplication.CurrentUser).Name;
+                vm.UserName = ((CustomPrincipal)System.Web.HttpContext.Current.User).Name;
                 vm.Projects = resp.Result;
             }
             else
@@ -53,8 +54,15 @@ namespace StepMap.WebClient.Controllers
             var client = new System.Net.WebClient();
             client.Headers.Add("Content-Type", "application/json");
             client.Encoding = Encoding.UTF8;
-            client.Headers.Add(HttpRequestHeader.Authorization, WebApiApplication.AuthorizationHeader);//"Basic a2VteTphZG1pbg==");
 
+            var user = System.Web.HttpContext.Current.User as CustomPrincipal;
+            if (user != null)
+            {
+                string up = user.Name + ":" + user.Hash;
+                var b = System.Text.Encoding.UTF8.GetBytes(up);
+                var ah = "Basic " + System.Convert.ToBase64String(b); 
+                client.Headers.Add(HttpRequestHeader.Authorization, ah);
+            }
             return client;
         }
 

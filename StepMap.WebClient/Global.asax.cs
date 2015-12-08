@@ -7,6 +7,8 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Web.Script.Serialization;
+using System.Web.Security;
 
 namespace StepMap.WebClient
 {
@@ -23,13 +25,24 @@ namespace StepMap.WebClient
 
         protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)
         {
-            if (CurrentUser != null)
+            HttpCookie authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
+
+            if (authCookie != null)
             {
-                HttpContext.Current.User = CurrentUser;
+                FormsAuthenticationTicket authTicket = FormsAuthentication.Decrypt(authCookie.Value);
+
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+
+                CustomPrincipalSer serializeModel = serializer.Deserialize<CustomPrincipalSer>(authTicket.UserData);
+
+                CustomPrincipal newUser = new CustomPrincipal(authTicket.Name);
+                newUser.Id = serializeModel.Id;
+                newUser.Email = serializeModel.Email;
+                newUser.Name = serializeModel.Name;
+                newUser.Hash = serializeModel.Hash;
+
+                HttpContext.Current.User = newUser;
             }
         }
-
-        public static string AuthorizationHeader = string.Empty;
-        public static IPrincipal CurrentUser = null;
     }
 }

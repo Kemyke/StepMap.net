@@ -60,6 +60,7 @@
     <Content Include="Scripts\20151109_02_Project.sql" />
     <Content Include="Scripts\20151109_03_Step.sql" />
     <Content Include="Scripts\20151203_02_UserRole.sql" />
+    <Content Include="Scripts\20151208_01_Project_UniqueKey.sql" />
     <Content Include="Scripts\20151206_01_DataStore.sql" />
     <Content Include="Scripts\20151203_06_UserConfirmation.sql" />
     <Content Include="Scripts\20151203_05_User.sql" />

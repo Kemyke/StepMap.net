@@ -70,10 +70,10 @@ namespace StepMap.BusinessLogic
             }
         }
 
-        private void SentFirstReminder(User user)
+        private void SentFirstReminder(User user, Project project, Step step)
         {
             //TODO: Config, customize, randomize
-            notificationManager.SendEmail(user, "First reminder", "Your current step ({0}) in project {1} is delayed! Get yourself together!"); //LOCSTR
+            notificationManager.SendEmail(user, "First reminder", string.Format("Your current step ({0}) in project {1} is delayed! Get yourself together!", step.Name, project.Name)); //LOCSTR
         }
 
         public void CheckProjectProgress(Project project)
@@ -86,7 +86,7 @@ namespace StepMap.BusinessLogic
                     project.BadPoint++;
                     if (!currentStep.SentReminders.Any())
                     {
-                        SentFirstReminder(project.User);
+                        SentFirstReminder(project.User, project, currentStep);
                         ctx.Projects.Attach(project);
                     }
                 }

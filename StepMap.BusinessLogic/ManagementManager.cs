@@ -22,7 +22,7 @@ namespace StepMap.BusinessLogic
             List<Project> projects;
             using(var ctx = new StepMapDbContext())
             {
-                projects = ctx.Projects.Include(p=>p.User).Include(p=>p.FinishedSteps).ToList();
+                projects = ctx.Projects.Include(p=>p.User).Include(p=>p.FinishedSteps.Select(x=>x.SentReminders)).ToList();
             }
 
             //Parallel.ForEach(ctx.Projects, (project) =>

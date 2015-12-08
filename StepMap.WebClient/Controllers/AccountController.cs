@@ -11,6 +11,8 @@ using System.Security.Principal;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
+using System.Web.Security;
 
 namespace StepMap.WebClient.Controllers
 {
@@ -25,20 +27,21 @@ namespace StepMap.WebClient.Controllers
             var client = new System.Net.WebClient();
             client.Headers.Add("Content-Type", "application/json");
             client.Encoding = Encoding.UTF8;
-            client.Headers.Add(HttpRequestHeader.Authorization, WebApiApplication.AuthorizationHeader);
+
+            var user = System.Web.HttpContext.Current.User as CustomPrincipal;
+            if (user != null)
+            {
+                string up = user.Name + ":" + user.Hash;
+                var b = System.Text.Encoding.UTF8.GetBytes(up);
+                var ah = "Basic " + System.Convert.ToBase64String(b);
+                client.Headers.Add(HttpRequestHeader.Authorization, ah);
+            }
             return client;
         }
 
         public ActionResult Index()
         {
             return View();
-        }
-
-        private void CreateAuthorizationHeader(string username, string pwdHash)
-        {
-            string up = username + ":" + pwdHash;
-            var b = System.Text.Encoding.UTF8.GetBytes(up);
-            WebApiApplication.AuthorizationHeader = "Basic " + System.Convert.ToBase64String(b);
         }
 
         private IPrincipal CreatePrincipal(User user)
@@ -52,17 +55,42 @@ namespace StepMap.WebClient.Controllers
 
         public ActionResult Login(FormCollection collection)
         {
+            var userName = collection["userName"];
             var pwdHash = CryptoHelper.CreatePasswordHash(collection["password"]);
-            CreateAuthorizationHeader(collection["userName"], pwdHash);
+            
             var client = CreateClient();
+            string up = userName + ":" + pwdHash;
+            var b = System.Text.Encoding.UTF8.GetBytes(up);
+            var ah = "Basic " + System.Convert.ToBase64String(b); 
+            client.Headers.Add(HttpRequestHeader.Authorization, ah);
 
             var json = client.DownloadString(ApiAddress + AccountResource);
             var resp = System.Web.Helpers.Json.Decode<Response<User>>(json);
 
             if (resp.ResultCode == ResultCode.OK)
             {
-                var p = CreatePrincipal(resp.Result);
-                WebApiApplication.CurrentUser = p;
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                CustomPrincipalSer serializeModel = new CustomPrincipalSer()
+                {
+                    Id = resp.Result.Id,
+                    Name = resp.Result.Name,
+                    Email = resp.Result.Email,
+                    Hash = pwdHash,
+                };
+                string userData = serializer.Serialize(serializeModel);
+
+                FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(
+                         1,
+                         resp.Result.Name,
+                         DateTime.Now,
+                         DateTime.Now.AddMinutes(15),
+                         false,
+                         userData);
+                
+                string encTicket = FormsAuthentication.Encrypt(authTicket);
+                HttpCookie faCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encTicket);
+                Response.Cookies.Add(faCookie);
+
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -79,7 +107,7 @@ namespace StepMap.WebClient.Controllers
 
         public ActionResult Logout()
         {
-            WebApiApplication.CurrentUser = null;
+            System.Web.HttpContext.Current.User = null;
             return View("Index");
         }
 
