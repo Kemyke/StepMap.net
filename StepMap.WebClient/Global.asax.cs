@@ -29,19 +29,25 @@ namespace StepMap.WebClient
 
             if (authCookie != null)
             {
-                FormsAuthenticationTicket authTicket = FormsAuthentication.Decrypt(authCookie.Value);
+                try
+                {
+                    FormsAuthenticationTicket authTicket = FormsAuthentication.Decrypt(authCookie.Value);
 
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                    JavaScriptSerializer serializer = new JavaScriptSerializer();
 
-                CustomPrincipalSer serializeModel = serializer.Deserialize<CustomPrincipalSer>(authTicket.UserData);
+                    CustomPrincipalSer serializeModel = serializer.Deserialize<CustomPrincipalSer>(authTicket.UserData);
 
-                CustomPrincipal newUser = new CustomPrincipal(authTicket.Name);
-                newUser.Id = serializeModel.Id;
-                newUser.Email = serializeModel.Email;
-                newUser.Name = serializeModel.Name;
-                newUser.Hash = serializeModel.Hash;
+                    CustomPrincipal newUser = new CustomPrincipal(authTicket.Name);
+                    newUser.Id = serializeModel.Id;
+                    newUser.Email = serializeModel.Email;
+                    newUser.Name = serializeModel.Name;
+                    newUser.Hash = serializeModel.Hash;
 
-                HttpContext.Current.User = newUser;
+                    HttpContext.Current.User = newUser;
+                }
+                catch
+                {
+                }
             }
         }
     }

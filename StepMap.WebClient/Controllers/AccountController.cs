@@ -107,7 +107,12 @@ namespace StepMap.WebClient.Controllers
 
         public ActionResult Logout()
         {
-            Response.Cookies.Remove(FormsAuthentication.FormsCookieName);
+            System.Web.HttpContext.Current.User = null;
+            HttpCookie c = Request.Cookies[FormsAuthentication.FormsCookieName];
+            c.Expires = DateTime.Now.AddDays(-1);
+            Response.Cookies.Set(c);
+            Session.Clear();
+
             return View("Index");
         }
 
