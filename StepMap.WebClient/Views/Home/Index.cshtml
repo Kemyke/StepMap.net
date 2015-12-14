@@ -26,6 +26,50 @@
                 this.$('.project').removeClass("editing");
                 this.$('#project-name').text(name);
             }
+
+            function editStepName() {
+                this.$('.stepname').addClass("editing");
+                this.$('.nextstep-name-input').focus();
+            }
+
+            function closeEditStepName(stepId, name) {
+                $.ajax({
+                    url: '@Url.Action("SetStepName", "Home")',
+                    type: 'GET',
+                    dataType: 'json',
+                    // we set cache: false because GET requests are often cached by browsers
+                    // IE is particularly aggressive in that respect
+                    cache: false,
+                    data: { stepId: stepId, name: name },
+                    success: function () {
+                    }
+                });
+
+                this.$('.stepname').removeClass("editing");
+                this.$('#nextStep').text(name);
+            }
+
+            function editStepDeadline() {
+                this.$('.stepdeadline').addClass("editing");
+                this.$('.nextstep-deadline-input').focus();
+            }
+
+            function closeEditStepDeadline(stepId, deadline) {
+                $.ajax({
+                    url: '@Url.Action("SetStepDeadline", "Home")',
+                    type: 'GET',
+                    dataType: 'json',
+                    // we set cache: false because GET requests are often cached by browsers
+                    // IE is particularly aggressive in that respect
+                    cache: false,
+                    data: { stepId: stepId, deadline: deadline },
+                    success: function () {
+                    }
+                });
+
+                this.$('.stepdeadline').removeClass("editing");
+                this.$('#deadline').text(deadline);
+            }
         </script>
 
         <body>
@@ -59,19 +103,19 @@
                                     <div class="step-out" style="background-position: -@(invStepsWidth)px 0;">
                                         <div class="step" style="position: relative;right: -@(stepsWidth)px;">
                                             <div class="stepname">
-                                                <div class="display">
+                                                <div class="display" ondblclick="editStepName();">
                                                     <label id="nextStep">@nextStep.Name</label>
                                                 </div>
                                                 <div class="edit">
-                                                    <input class="nextstep-name-input" type="text" value="@nextStep.Name" />
+                                                    <input class="nextstep-name-input" type="text" onblur="closeEditStepName(@nextStep.Id, document.getElementsByClassName('nextstep-name-input')[0].value);" value="@nextStep.Name" />
                                                 </div>
                                             </div>
                                             <div class="stepdeadline">
-                                                <div class="display">
+                                                <div class="display" ondblclick="editStepDeadline();">
                                                     <label id="deadline">@nextStep.Deadline</label>
                                                 </div>
                                                 <div class="edit">
-                                                    <input class="nextstep-deadline-input" type="text" id="datepicker" value="@nextStep.Deadline" />
+                                                    <input class="nextstep-deadline-input" type="text" onblur="closeEditStepDeadline(@nextStep.Id, document.getElementsByClassName('nextstep-deadline-input')[0].value);" id="datepicker" value="@nextStep.Deadline" />
                                                 </div>
                                             </div>
                                             @using (Html.BeginForm("CloseStep", "Home", new { projectId = @project.Id }, FormMethod.Post, null))

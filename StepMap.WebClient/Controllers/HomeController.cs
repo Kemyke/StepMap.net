@@ -104,6 +104,42 @@ namespace StepMap.WebClient.Controllers
             return View("Index", GetProjects());
         }
 
+        public ActionResult SetStepName(int stepId, string name)
+        {
+            var c = CreateClient();
+            var x = c.DownloadString(Address);
+            var z = System.Web.Helpers.Json.Decode<Response<IList<Project>>>(x).Result;
+            var p = z.Single(tp => tp != null && tp.FinishedSteps.Any(s => s.Id == stepId));
+
+            var client = CreateClient();
+            var step = p.FinishedSteps.Single(s => s.Id == stepId);
+            step.Name = name;
+            string json = System.Web.Helpers.Json.Encode(p);
+
+            //TODO: error handling
+            client.UploadString(Address, "PUT", json);
+
+            return View("Index", GetProjects());
+        }
+
+        public ActionResult SetStepDeadline(int stepId, string deadline)
+        {
+            var c = CreateClient();
+            var x = c.DownloadString(Address);
+            var z = System.Web.Helpers.Json.Decode<Response<IList<Project>>>(x).Result;
+            var p = z.Single(tp => tp != null && tp.FinishedSteps.Any(s => s.Id == stepId));
+
+            var client = CreateClient();
+            var step = p.FinishedSteps.Single(s => s.Id == stepId);
+            step.Deadline = DateTime.Parse(deadline);
+            string json = System.Web.Helpers.Json.Encode(p);
+
+            //TODO: error handling
+            client.UploadString(Address, "PUT", json);
+
+            return View("Index", GetProjects());
+        }
+        
         public ActionResult CloseProject(int projectId)
         {
             try

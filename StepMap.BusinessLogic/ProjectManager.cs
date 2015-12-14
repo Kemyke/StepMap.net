@@ -46,7 +46,13 @@ namespace StepMap.BusinessLogic
             using (var ctx = new StepMapDbContext())
             {
                 project = ctx.Projects.Attach(project);
+                
                 ctx.Entry(project).State = EntityState.Modified;
+                foreach(var step in ctx.Steps.Where(s=>s.Id != 0))
+                {
+                    var s = ctx.Steps.Attach(step);
+                    ctx.Entry(s).State = EntityState.Modified;
+                }
                 ctx.Steps.AddRange(project.FinishedSteps.Where(s => s.Id == 0));
                 ctx.SaveChanges();
             }
@@ -72,8 +78,21 @@ namespace StepMap.BusinessLogic
 
         private void SentFirstReminder(User user, Project project, Step step)
         {
-            //TODO: Config, customize, randomize
-            notificationManager.SendEmail(user, "First reminder", string.Format("Your current step ({0}) in project {1} is delayed! Get yourself together!", step.Name, project.Name)); //LOCSTR
+            using (var ctx = new StepMapDbContext())
+            {
+                //TODO: Config, customize, randomize
+                Reminder reminder = new Reminder()
+                {
+                    EmailAddress = user.Email,
+                    Message = string.Format("Your current step ({0}) in project {1} is delayed! Get yourself together!", step.Name, project.Name), //LOCSTR
+                    Subject = "First reminder", //LOCSTR
+                    SentDate = DateTime.UtcNow,
+                    StepId = step.Id
+                };
+                ctx.Reminders.Add(reminder);
+                notificationManager.SendEmail(user, reminder.Subject, reminder.Message);
+                ctx.SaveChanges();
+            }
         }
 
         public void CheckProjectProgress(Project project)
